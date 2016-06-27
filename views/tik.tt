@@ -1,0 +1,16 @@
+        <h2>Ticket ID Nro:</h2>
+        <div id="subido">
+        
+            Nombre
+            Dominio
+            Contacto
+            Importancia
+            Descripcion
+            fecha
+
+        </div>
+<div id="respuesta">
+            ID
+            Estado
+            Devolucion
+</div>

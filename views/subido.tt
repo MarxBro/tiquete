@@ -1,0 +1,8 @@
+        <h2>Éxitos!</h2>
+        <p>Su ticket se creó exitosamente.</p>
+        <p>Puede entrar a verlo en este enlace <a href="<% URL_NN %>"><bold><% URL_NN %></bold></a>.</p>
+        <p>
+            <i>Le recomendamos guarde la dirección <strong>como referencia</strong>.</i>.
+        </p>
+        
+        <div id="us">A la brevedad nos contactaremos con Ud. para informarle acerca de su resolución.</div>

@@ -1,0 +1,22 @@
+        <h1>Tickets Abiertos</h1>
+        <table>
+            <th>
+            <td>ID</td>
+            <td>URL</td>
+            <td>Dominio</td>
+            <td>Descripción</td>
+            <td>Importancia</td>
+            <td>Nombre Cliente</td>
+            <td>Contacto</td>
+            </th>
+        </table>
+        <h1>Tickets Cerrados</h1>
+            <th>
+            <td>ID</td>
+            <td>URL</td>
+            <td>Dominio</td>
+            <td>Descripción</td>
+            <td>Importancia</td>
+            <td>Nombre Cliente</td>
+            <td>Contacto</td>
+            </th>
