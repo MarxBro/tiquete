@@ -8,16 +8,7 @@ use File::Slurp;
 use utf8;
 use feature "say";
 use Data::Uniqid "luniqid";
-
-=pod
-
-=encoding utf8
-
-=head1 SYNOPSIS
-
-Ticket system.
-
-=cut
+use Email::MIME;
 
 # Data estructure
 # 0     ID
@@ -30,6 +21,11 @@ Ticket system.
 # ++7   estado
 # ++8   devolucion
 
+# La fecha es automática.
+# El estado y la devolución son agregados poe el admin.
+#El sistema tiene que mandar mails cuando:
+#* se abre un nuevo ticket (A los admines + confirmacion para el user?)
+#* se cierra un nuevo ticket (Al user)
 
 #-------------------------------------------------------
 #                                           VARIABLES
@@ -43,7 +39,14 @@ my @csv_file = ();
 
 our $VERSION = '0.1';
 
-#S U B S
+
+######################################################################
+#/ ___|  | | | | | __ )  / ___| 
+#\___ \  | | | | |  _ \  \___ \ 
+# ___) | | |_| | | |_) |  ___) |
+#|____/   \___/  |____/  |____/ 
+######################################################################
+                               
 sub leer_db {
     my @archivo = read_file(config->{'data'});
     @csv_file = @archivo;
@@ -75,10 +78,45 @@ sub valid_mail {
     return $regex;
 }
 
+# Salio de aca: http://learn.perl.org/examples/email.html
+sub mailing {
+    my $emisor = config->{'mail_send_from'};;
+    my $recipiente = $_[0];
+    my $mensaje = $_[1]; # Lineas separadas con "\n" !
+    my $asunto = $_[2];
+    my $encoding = config->{'mail_send_encoding'};
+    my $charset = config->{'mail_send_charset'};
+    my $rt = config->{'mail_send_reply'};
+    # first, create your message
+    my $message = Email::MIME->create(
+        header_str => [
+            From     => $emisor,
+            To       => $recipiente,
+            Subject  => $asunto,
+            Reply-To => $rt,
+        ],
+        attributes => {
+            encoding => $encoding,
+            charset  => $charset,
+        },
+        body_str => $mensaje,
+    );
+
+    # send the message
+    use Email::Sender::Simple qw(sendmail);
+    sendmail($mensaje);
+}
+
 sub give_me_id {
     return luniqid();
 }
 
+######################################################################
+#|  _ \  / \  | \ | |/ ___| ____|  _ \  |  _ \ / \  |  _ \_   _|
+#| | | |/ _ \ |  \| | |   |  _| | |_) | | |_) / _ \ | |_) || |  
+#| |_| / ___ \| |\  | |___| |___|  _ <  |  __/ ___ \|  _ < | |  
+#|____/_/   \_\_| \_|\____|_____|_| \_\ |_| /_/   \_\_| \_\|_|  
+######################################################################
 
 #------------------------       Hook
 
@@ -195,17 +233,6 @@ any qr{.*} => sub {
 }; 
 
 
-#-----------------------------------------------------------------------------#
-=pod
-
-=head1 Autor y Licencia.
-
-Programado por B<Marxbro> aka B<Gstv>, distribuir solo bajo la licencia
-WTFPL: I<Do What the Fuck You Want To Public License>.
-
-Zaijian.
-
-=cut
-#-----------------------------------------------------------------------------#
 
 true;
+
