@@ -9,9 +9,9 @@ $eumm_version =~ s/_//;
 
 WriteMakefile(
     NAME                => 'tiquete',
-    AUTHOR              => q{YOUR NAME <youremail@example.com>},
+    AUTHOR              => q{MarxBro <allthemarxbrothers@gmail.com>},
     VERSION_FROM        => 'lib/tiquete.pm',
-    ABSTRACT            => 'YOUR APPLICATION ABSTRACT',
+    ABSTRACT            => 'Tickets & Ayuda',
     ($eumm_version >= 6.3001
       ? ('LICENSE'=> 'perl')
       : ()),

@@ -33,6 +33,7 @@ pass_admin: secretisimo123
 
 
 # Mails! Para enviar desde la app.
+mail_enable: 0
 mail_send_from: tickets@hipermegared.com.ar
 mail_send_reply: c@hipermegared.com.ar
 mail_send_encoding: ISO-8859-1

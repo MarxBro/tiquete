@@ -3,6 +3,8 @@
 <head>
   <meta charset="<% settings.charset %>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="authors" content="HiperMegaRed">
+  <meta name="description" content="Sistema de soporte técnico de HMR.">
   <title>Tickets & Ayuda</title>
   <link rel="stylesheet" href="<% request.uri_base %>/css/style.css">
 
@@ -14,9 +16,9 @@
 
 </head>
 <body>
+<div id="page">
 <% content %>
-<div id="footer">
-HMR 2016
 </div>
+<div id="footer">HMR 2016.</div>
 </body>
 </html>

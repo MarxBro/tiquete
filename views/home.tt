@@ -1,26 +1,24 @@
-<html>
-    <body>
-        <h1>HMR: Área de Soporte Técnico</h1>
-    <h2><a href="/nuevo">Crear un nuevo Ticket</a></h2>
-    <p>Puede crear un nuevo ticket cliqueando en el título.</p>
-    
-    <h2>Ver el estado de mi Ticket</h2>
-    <p>Para revisar el estado de algún ticket emitido previamente, <strong>utilice el id asignado</strong>.</p>
-    <form action="/ticket" method="post">
-        <input name="ID" class="text" type="text" placeholder="id1231">
-        <input name="submit" class="text" type="submit">
-    </form>
-    
-    
-    
-    <h1>Acerca de los Tickets</h2>
+<h1>HMR: Área de Soporte Técnico</h1>
+<h2><a href="/nuevo">Crear un nuevo Ticket</a></h2>
+<p>Puede crear un nuevo ticket cliqueando en el título.</p>
+
+<h2>Ver el estado de mi Ticket</h2>
+<p>Para revisar el estado de algún ticket emitido previamente, <strong>utilice el id asignado</strong>.</p>
+<form action="/ticket" method="post">
+<input name="ID" class="text" type="text" placeholder="id1231">
+<input name="submit" class="text" type="submit">
+</form>
+
+
+
+<h1>Acerca de los Tickets</h2>
 <div id="tickets">
-    <p>Los tickets son nuestra herramienta para brindar soporte y los tomamos muy seiramente, por eso decidimos crear nuestro propio sistema para manejarlos.</p>
-    <p>Abrir un ticket significa puntualizar un problema como el primer paso hacia su solución.</p>
-    <p>Todos los tickets válidamente inicializados, remiten un mensaje a los administradores quienes se encargan a la brevedad de solucionarlo: es su tarea.</p>
-    <p>El nivel de prioridad es importante, ya que algunas tareas requieren soluciones inmediatas y otras necesitan un plan de trabajo a corto o mediano plazo.</p>
-    <p>Todos los tickets reciben nuestra atención y su resolución es nuestra impostergable prioridad.</p>
-    <p>Por cualquier consulta adicional, estamos <a href="mailto:c@hipermegared.com.ar">a su disposición</a>.</p>
+<p>Los tickets son nuestra herramienta para brindar soporte y los tomamos muy seiramente, por eso decidimos crear nuestro propio sistema para manejarlos.</p>
+<p>Abrir un ticket significa puntualizar un problema como el primer paso hacia su solución.</p>
+<p>Todos los tickets válidamente inicializados, remiten un mensaje a los administradores quienes se encargan a la brevedad de solucionarlo: es su tarea.</p>
+<p>El nivel de prioridad es importante, ya que algunas tareas requieren soluciones inmediatas y otras necesitan un plan de trabajo a corto o mediano plazo.</p>
+<p>Todos los tickets reciben nuestra atención y su resolución es nuestra impostergable prioridad.</p>
+<p>Por cualquier consulta adicional, estamos <a href="mailto:c@hipermegared.com.ar">a su disposición</a>.</p>
 </div>
 
 <!-- 
@@ -34,5 +32,3 @@
 -->
 
 <div id="mo">Último acceso: <% fecha %></div>
-    </body>
-</html>

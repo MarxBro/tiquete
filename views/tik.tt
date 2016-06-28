@@ -1,16 +1,19 @@
-        <h2>Ticket ID Nro:</h2>
-        <div id="subido">
-        
-            Nombre
-            Dominio
-            Contacto
-            Importancia
-            Descripcion
-            fecha
+<h2>Ticket ID Nro:</h2>
+<div id="tiq">
 
-        </div>
-<div id="respuesta">
-            ID
-            Estado
-            Devolucion
+    <div id="subido">
+        <div>Nombre</div>       <div><%  %><div>
+        <div>Dominio</div>      <div><%  %><div>
+        <div>Contacto</div>     <div><%  %><div>
+        <div>Importancia</div>  <div><%  %><div>
+        <div>Descripción</div>  <div><%  %><div>
+        <div>Fecha</div>        <div><%  %><div>
+    </div>
+
+    <div id="respuesta">
+        <div>ID</div>           <div><%  %><div>
+        <div>Estado</div>       <div><%  %><div>
+        <div>Devolución</div>   <div><%  %><div>
+    </div>
+
 </div>

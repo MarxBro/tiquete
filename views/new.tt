@@ -4,14 +4,14 @@
 <p>No ovidar una dirección de contacto que sea utilizada frecuentemente.</p>
 
 <form method="post" action="nuevo" >
-<strong>E-mail de Contacto</strong>: <input type="e-mail" name="e-mail" placeholder="contacto@host.com.ar" class="e-mail" required>
-<strong>Nombre</strong>: <input type="text" name="Nombre" placeholder="Nombre y Apellido" class="text" required>
-<strong>Dominio</strong>: <input type="text" name="Dominio" placeholder="URL o dominio" class="text" required>
-<strong>Importancia</strong>: <select name="Importancia">
-<option value="Moderada" selected="selected">Moderada</option>
-<option value="Bastante">Bastante</option>
-<option value="Crítica">Crítica</option>
-</select>
-<textarea rows="20" cols="80" name="Desc" placeholder="Describa aquí el motivo de la apertura del ticket..." required></textarea>
-<input type="submit" value="submit">
+    <strong>E-mail de Contacto</strong>: <input type="e-mail" name="e-mail" placeholder="contacto@host.com.ar" class="e-mail" required>
+    <strong>Nombre</strong>: <input type="text" name="Nombre" placeholder="Nombre y Apellido" class="text" required>
+    <strong>Dominio</strong>: <input type="text" name="Dominio" placeholder="URL o dominio" class="text" required>
+    <strong>Importancia</strong>: <select name="Importancia">
+        <option value="Moderada" selected="selected">Moderada</option>
+        <option value="Bastante">Bastante</option>
+        <option value="Crítica">Crítica</option>
+    </select>
+    <textarea rows="20" cols="80" name="Desc" placeholder="Describa aquí el motivo de la apertura del ticket..." required></textarea>
+    <input type="submit" value="submit">
 </form>
