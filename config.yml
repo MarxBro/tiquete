@@ -39,3 +39,10 @@ mail_send_reply: c@hipermegared.com.ar
 mail_send_encoding: ISO-8859-1
 mail_send_charset: quoted-printable
 
+# Configuraciones para limitar la cantidad de tickets abiertos por dominio/Contacto
+maximos_tickets_per_mail: 3
+maximos_tickets_per_domain: 1
+
+# defaults para los ticketes
+default_tik_st: "Abierto"
+default_tik_dev: "Ticket asignado para su pronta resoluci&oacute;n. Vuelva pronto!"

@@ -9,6 +9,7 @@ use utf8;
 use feature "say";
 use Data::Uniqid "luniqid";
 use Email::MIME;
+use List::MoreUtils "first_index";
 
 # Data estructure
 # 0     ID
@@ -36,6 +37,7 @@ my %T = ();
 my @fields_csv = qw( 0ID 1mail 2nombre 3dominio 4importancia 5descripcion 6fecha 7estado 8devolucion );
 my $tik_id = 3;
 my @csv_file = ();
+my $sep = '|||';
 
 our $VERSION = '0.1';
 
@@ -74,8 +76,13 @@ sub valid_mail {
     my $email = shift;
     my $username = qr/[a-z0-9]([a-z0-9.]*[a-z0-9])?/;
     my $domain   = qr/[a-z0-9.-]+/;
-    my $regex = $email =~ /^$username\@$domain$/;
-    return $regex;
+    if ($email =~ /^$username\@$domain$/g){
+        if ($email =~ m/\.+/){
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }
 
 # Salio de aca: http://learn.perl.org/examples/email.html
@@ -93,7 +100,7 @@ sub mailing {
             From     => $emisor,
             To       => $recipiente,
             Subject  => $asunto,
-            Reply-To => $rt,
+            #Reply-To => $rt,
         ],
         attributes => {
             encoding => $encoding,
@@ -110,6 +117,24 @@ sub mailing {
 sub give_me_id {
     return luniqid();
 }
+
+sub join_lines {
+    my $i = shift;
+    $i =~ s/\r//g;
+    $i =~ s/\n/<br\/>/g;
+    return $i;
+}
+
+sub split_lines {
+    my $i = shift;
+    $i =~ s/<br \/>/\n/g;
+    return $i;
+}
+
+#sub hash_to_csv {
+    #my $id = shift;
+    #}
+
 
 ######################################################################
 #|  _ \  / \  | \ | |/ ___| ____|  _ \  |  _ \ / \  |  _ \_   _|
@@ -146,31 +171,34 @@ post '/nuevo' => sub {
     my $ID_new = give_me_id();
     my $fecha_ahora = time();
 
-    unless (valid_mail($email)){
+    #Excepciones
+    if (valid_mail($email)){
         return '<html><body><h2>Direccion de e-mail inválida. Intente nuevamente.</h2></body></html>';
+    } 
+    if (length($descripcion) < 25){
+        return '<html><body><h2>iLa descripción es demasiado corta. Intente nuevamente.</h2></body></html>';
     }
 
     #Hacer La linea del CSV.
-    my $sep = '|||';
     my $ln = 
-    $ID_new     . $sep . 
-    $email      . $sep . 
-    $nombre     . $sep . 
-    $dominio    . $sep . 
-    $importancia . $sep . 
-    $descripcion . $sep . 
-    $fecha_ahora;
+        $ID_new     . $sep . 
+        $email      . $sep . 
+        $nombre     . $sep . 
+        $dominio    . $sep . 
+        $importancia . $sep . 
+        join_lines($descripcion) . 
+        $sep . $fecha_ahora . "\n";
 
     #al final
     write_db($ln);
-    redirect "/subido/$ID_new";
+    redirect "/ticket/$ID_new";
 };
 
-get '/subido/:ID' => sub {
-    my $tik_id = params->{'ID'} || template '404', { path => request->path };
-    my $tik_uri = '/ticket/' . $tik_id;
-    template 'subido', { URL_NN => $tik_uri };
-};
+#get '/subido/:ID' => sub {
+    #my $tik_id = params->{'ID'} || template '404', { path => request->path };
+    #my $tik_uri = '/ticket/' . $tik_id;
+    #template 'subido', { URL_NN => $tik_uri };
+#};
 
 
 ######################################################################
@@ -186,7 +214,23 @@ get '/ticket/:ID' => sub {
         status 'not_found';
         template '404', { path => request->path };
     }
-    template 'tik', { ID => $tik_id };
+
+    #Defaults
+    my $EST  = $T{$tik_id}{'7estado'} || config->{'default_tik_st'}; 
+    my $DEVO = $T{$tik_id}{'8devolucion'} || config->{'default_tik_dev'};
+    #'Ticket asignado para su pronta resolución.'; 
+
+    template 'tik', { 
+        Nombre =>       $T{$tik_id}{'2nombre'}, 
+        Dominio =>      $T{$tik_id}{'3dominio'}, 
+        Contacto =>     $T{$tik_id}{'1mail'}, 
+        Importancia =>  $T{$tik_id}{'4importancia'}, 
+        Descripcion =>  join_lines($T{$tik_id}{'5descripcion'}), 
+        Fecha =>        scalar localtime $T{$tik_id}{'6fecha'}, 
+        ID =>           $T{$tik_id}{'0ID'}, 
+        Estado =>       $EST,
+        Devolucion =>   $DEVO,
+    };
 };
 
 ######################################################################
@@ -208,16 +252,46 @@ get '/all/cli' => sub {
 get '/ticket/:ID/done/:pass' => sub{
     my $tik_id = params->{'ID'};
     my $u_pa = params->{'pass'};
-    template 'fix_ticket.tt';
+    if ($u_pa eq config->{pass_admin}){
+        template 'fix_ticket', { 
+            Nombre =>       $T{$tik_id}{'2nombre'}, 
+            Dominio =>      $T{$tik_id}{'3dominio'}, 
+            Contacto =>     $T{$tik_id}{'1mail'}, 
+            Importancia =>  $T{$tik_id}{'4importancia'}, 
+            Descripcion =>  join_lines($T{$tik_id}{'5descripcion'}), 
+            Fecha =>        scalar localtime $T{$tik_id}{'6fecha'}, 
+            ID =>           $T{$tik_id}{'0ID'}, 
+            #path =>         request->path, 
+            pass => $u_pa,
+        };
+    } else {
+        status 'not_found';
+        template '404', { path => request->path };
+    }
 };
-post '/ticket/:ID/done/:pass' => sub{
+
+post '/fix' => sub{
     my $tik_id = params->{'ID'};
     my $u_pa = params->{'pass'};
-    template 'fix_ticket.tt';
-    if ($u_pa eq config->{tiquete}{pass_admin}){
+    my $estado = params->{'ESTADO'};
+    my $devolucion = join_lines(params->{'Devo'});
+
+    if ($u_pa eq config->{pass_admin}){
         #do stuff
+        my $index_of_ticket = first_index {/$tik_id/} @csv_file;
+        my $ln_par_laburar = $csv_file[$index_of_ticket];
+        $ln_par_laburar .= s/\r$//g;
+        $ln_par_laburar .= s/\n$//g;
+        my $append_to_csv = $sep . $estado . $sep . $devolucion . "\n";
+        $ln_par_laburar .= $append_to_csv;
+        $csv_file[$index_of_ticket] = $ln_par_laburar;
+
+        write_file(config->{'data'}, { binmode => ':utf8'}, @csv_file);
+
         #al final
-        redirect '/all';
+        #redirect '/all';
+        redirect "/ticket/$tik_id";
+
     } else{
         status 'not_found';
         template '404', { path => request->path };

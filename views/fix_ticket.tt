@@ -1,16 +1,37 @@
-        <h2>Ticket ID Nro:</h2>
-        <div id="subido">
-        
-            Nombre
-            Dominio
-            Contacto
-            Importancia
-            Descripcion
-            fecha
+<h2>--- <% ID %> ---</h2>
+<div id="tiq">
+<h3>Status: 
+<% IF Estado %>
+<% Estado %>
+<% ELSE %>
+Abierto !!
+<% END %>
+</h3>
+    <div id="subido">
+        <h3>Nombre</h3>       <pre><% Nombre %></pre>
+        <h3>Dominio</h3>      <pre><% Dominio %></pre>
+        <h3>Contacto</h3>     <pre><% Contacto %></pre>
+        <h3>Importancia</h3>  <pre><% Importancia %></pre>
+        <h3>Descripción</h3>  <pre><% Descripcion %></pre>
+        <h3>Fecha</h3>        <pre><% Fecha %></pre>
+    </div>
 
-        </div>
-<div id="respuesta">
-            ID
-            Estado
-            Devolucion
+    <div id="respuesta">
+
+
+    <form method="post" action="/fix" >
+        <strong>Estado del ticket</strong>: <select name="ESTADO"><br />
+            <option value="cerrado" selected="selected">Cerrado</option>
+            <option value="asignado">Asignado</option>
+            <option value="soporte">Soporte Requerido</option>
+        </select>
+        <br />
+        <textarea rows="20" cols="80" name="Devo" placeholder="Devolución para el cliente." required></textarea>
+        <br />
+        <input type="hidden" value="<% pass %>" name="pass">
+        <input type="hidden" value="<% ID %>" name="ID">
+        <input type="submit" value="Actualizar Ticket">
+    </form>
+
+    </div>
 </div>
