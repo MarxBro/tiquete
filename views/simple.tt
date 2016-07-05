@@ -1,3 +1,5 @@
-    <h1>Error!</h1>
-    <p>La ruta <% path %> <strong>no existe</strong>.</p>
+    <h2><% titulo %></h2>
+    <div id="msj">
+        <% mensaje %>
+    </div>
     <br /><input action="action" type="button" value="Volver" onclick="history.go(-1);" /><br />

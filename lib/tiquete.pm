@@ -6,10 +6,10 @@ use POSIX q/strftime/;
 use Data::Dumper;
 use File::Slurp;
 use utf8;
-use feature "say";
-use Data::Uniqid "luniqid";
-use Email::MIME;
-use List::MoreUtils "first_index";
+use feature             "say";
+use Data::Uniqid        "luniqid";
+#use Email::MIME;
+use List::MoreUtils     "first_index";
 
 # Data estructure
 # 0     ID
@@ -28,6 +28,8 @@ use List::MoreUtils "first_index";
 #* se abre un nuevo ticket (A los admines + confirmacion para el user?)
 #* se cierra un nuevo ticket (Al user)
 
+#Usar CSV es malo, pero es mas facil pa que la gilada despues use excel y se arregle
+
 #-------------------------------------------------------
 #                                           VARIABLES
 #-------------------------------------------------------
@@ -38,9 +40,9 @@ my @fields_csv = qw( 0ID 1mail 2nombre 3dominio 4importancia 5descripcion 6fecha
 my $tik_id = 3;
 my @csv_file = ();
 my $sep = '|||';
+my $go_back_linky = '<br /><input action="action" type="button" value="Volver" onclick="history.go(-1);" /><br />';
 
 our $VERSION = '0.1';
-
 
 ######################################################################
 #/ ___|  | | | | | __ )  / ___| 
@@ -73,15 +75,14 @@ sub write_db {
 
 #if (valid_mail("s@shshsh.com")){ print "OK!"; } 
 sub valid_mail {
-    my $email = shift;
-    my $username = qr/[a-z0-9]([a-z0-9.]*[a-z0-9])?/;
-    my $domain   = qr/[a-z0-9.-]+/;
-    if ($email =~ /^$username\@$domain$/g){
-        if ($email =~ m/\.+/){
-            return 1;
-        } else {
-            return 0;
-        }
+    #my $email = shift;
+    my $email = $_[0];
+    my $username = qr'[a-z0-9]([a-z0-9.]*[a-z0-9])?';
+    my $domain   = qr'[a-z0-9.-]+';
+    if ($email =~ m/^$username[@]+$domain$/gxi){
+        return 1;
+    } else {
+        return 0;
     }
 }
 
@@ -172,11 +173,17 @@ post '/nuevo' => sub {
     my $fecha_ahora = time();
 
     #Excepciones
-    if (valid_mail($email)){
-        return '<html><body><h2>Direccion de e-mail inválida. Intente nuevamente.</h2></body></html>';
+    unless (valid_mail($email)){
+        my $titu = 'Error: e-mail';
+        my $ms = 'Direccion de e-mail inválida. Intente nuevamente.';
+        status 'bad_request';
+        return template 'simple', { titulo => $titu, mensaje => $ms };
     } 
-    if (length($descripcion) < 25){
-        return '<html><body><h2>iLa descripción es demasiado corta. Intente nuevamente.</h2></body></html>';
+    if (length($descripcion) < config->{'min_longitud_descripcion_tik'}){
+        my $titu = 'Error: descripción';
+        my $ms = 'La descripción es demasiado corta. Intente nuevamente.'; 
+        status 'bad_request';
+        return template 'simple', { titulo => $titu, mensaje => $ms };
     }
 
     #Hacer La linea del CSV.
@@ -309,4 +316,3 @@ any qr{.*} => sub {
 
 
 true;
-
