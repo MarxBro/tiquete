@@ -22,7 +22,6 @@ Abierto !!
     <form method="post" action="/fix" >
         <strong>Estado del ticket</strong>: <select name="ESTADO"><br />
             <option value="cerrado" selected="selected">Cerrado</option>
-            <option value="asignado">Asignado</option>
             <option value="soporte">Soporte Requerido</option>
         </select>
         <br />

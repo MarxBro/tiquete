@@ -5,8 +5,8 @@
 
 <form method="post" action="nuevo" >
     <strong>E-mail de Contacto</strong>: <input type="e-mail" name="e-mail" placeholder="contacto@host.com.ar" class="e-mail" required><br />
-    <strong>Nombre</strong>: <input type="text" name="Nombre" placeholder="Nombre y Apellido" class="text" required><br />
-    <strong>Dominio</strong>: <input type="text" name="Dominio" placeholder="URL o dominio" class="text" required><br />
+    <strong>Nombre y Apellido</strong>: <input type="text" name="Nombre" placeholder="Nombre y Apellido" class="text" required><br />
+    <strong>Dominio (dirección del sitio)</strong>: <input type="text" name="Dominio" placeholder="URL o dominio" class="text"><br />
     <strong>Importancia</strong>: <select name="Importancia"><br />
         <option value="Moderada" selected="selected">Moderada</option>
         <option value="Bastante">Bastante</option>

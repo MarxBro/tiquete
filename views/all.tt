@@ -1,22 +1,19 @@
-        <h1>Tickets Abiertos</h1>
+        <h2>Tickets Abiertos</h2>
         <table>
-            <th>
-            <td>ID</td>
-            <td>URL</td>
-            <td>Dominio</td>
-            <td>Descripción</td>
-            <td>Importancia</td>
-            <td>Nombre Cliente</td>
-            <td>Contacto</td>
-            </th>
+        <tr>
+            <th colspan="1">Fecha</th>
+            <th colspan="2">Nombre Cliente</th>
+            <th colspan="3">Contacto</th>
+            <th colspan="4">Dominio</th>
+            <th colspan="5">Descripción</th>
+            <th colspan="6">Importancia</th>
+            <th colspan="7">ID</th>
+        </tr>
+        
+        <!-- loopear -->
+        <tr>
+            <td>
+            </td>
+        </tr>
+        
         </table>
-        <h1>Tickets Cerrados</h1>
-            <th>
-            <td>ID</td>
-            <td>URL</td>
-            <td>Dominio</td>
-            <td>Descripción</td>
-            <td>Importancia</td>
-            <td>Nombre Cliente</td>
-            <td>Contacto</td>
-            </th>

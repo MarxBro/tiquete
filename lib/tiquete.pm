@@ -1,11 +1,10 @@
 package tiquete;
 use Dancer2;
 
+#use utf8;
 use POSIX q/strftime/;
 #use Pod::Usage;
-use Data::Dumper;
 use File::Slurp;
-use utf8;
 use feature             "say";
 use Data::Uniqid        "luniqid";
 #use Email::MIME;
@@ -52,7 +51,7 @@ our $VERSION = '0.1';
 ######################################################################
                                
 sub leer_db {
-    my @archivo = read_file(config->{'data'});
+    my @archivo = read_file(config->{'data'}, { binmode => ':utf8'});
     @csv_file = @archivo;
     foreach my $ln (@archivo){
         next if $ln =~ /^id/i;
@@ -162,6 +161,7 @@ get '/' => sub {
 get '/nuevo' => sub {
     template 'new';
 };
+
 post '/nuevo' => sub {
     my $email = params->{'e-mail'};
     my $nombre = params->{'Nombre'};
@@ -237,14 +237,18 @@ get '/ticket/:ID' => sub {
         ID =>           $T{$tik_id}{'0ID'}, 
         Estado =>       $EST,
         Devolucion =>   $DEVO,
+        precio =>       config->{'precio_hora_soporte'}, 
     };
 };
 
 ######################################################################
 #                                                       Admins
 get '/all' => sub {
-    template 'all';
+    my %abiertos = ();
+    my %cerrados = ();
+    template 'all', { abiertos => \%abiertos, cerrados => \%cerrados};
 };
+
 get '/all/cli' => sub {
     my $result;
     foreach my $e (@csv_file){
@@ -286,19 +290,16 @@ post '/fix' => sub{
     if ($u_pa eq config->{pass_admin}){
         #do stuff
         my $index_of_ticket = first_index {/$tik_id/} @csv_file;
-        my $ln_par_laburar = $csv_file[$index_of_ticket];
-        $ln_par_laburar .= s/\r$//g;
-        $ln_par_laburar .= s/\n$//g;
-        my $append_to_csv = $sep . $estado . $sep . $devolucion . "\n";
-        $ln_par_laburar .= $append_to_csv;
+        my $ln_par_laburar  = $csv_file[$index_of_ticket];
+        #sacar los saltos de línea que pueda tener: usamos un puto CSV!
+        $ln_par_laburar     =~ s/\r//g;
+        $ln_par_laburar     =~ s/\n//g;
+        my $append_to_csv   = $sep . $estado . $sep . $devolucion . "\n";
+        $ln_par_laburar     .= $append_to_csv;
         $csv_file[$index_of_ticket] = $ln_par_laburar;
-
+        # al final: escribir de nuevo y redireccionar (el hook recarga la data)
         write_file(config->{'data'}, { binmode => ':utf8'}, @csv_file);
-
-        #al final
-        #redirect '/all';
         redirect "/ticket/$tik_id";
-
     } else{
         status 'not_found';
         template '404', { path => request->path };

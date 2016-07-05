@@ -14,4 +14,13 @@
         <h3>Devolución</div>   <pre><% Devolucion %></pre>
     </div>
 
+<br />
+<br />
+<span style="float: right;">Por favor, <strong>guarde esta página como referencia de su ticket</strong>.</span>
+<br />
+<span style="float: right;">El precio de <strong>una hora</strong> de soporte es de <b><% precio %></b>.</span>
+<br />
+<span style="float: right;">Por cualquier consulta adicional, <strong>contactanos por <a href="mailto:c@hipermegared.com.ar">mail</a></b>.</span>
+<br />
+<br />
 </div>

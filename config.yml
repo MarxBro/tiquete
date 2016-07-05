@@ -46,4 +46,5 @@ maximos_tickets_per_domain: 1
 # defaults para los ticketes
 default_tik_st: "Abierto"
 default_tik_dev: "Ticket asignado para su pronta resoluci&oacute;n. Vuelva pronto!"
-min_longitud_descripcion_tik: 40
+min_longitud_descripcion_tik: 30
+precio_hora_soporte: "$400"
