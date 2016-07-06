@@ -1,7 +1,7 @@
         <h2>Tickets Abiertos</h2>
         <table>
         <tr>
-            <th >ID</th>
+            <th >IDENTIFICADOR</th>
             <th >Mail Contacto</th>
             <th >Nombre Cliente</th>
             <th >Dominio</th>
