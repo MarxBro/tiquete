@@ -4,16 +4,26 @@
 <p>No ovidar una dirección de contacto que sea utilizada frecuentemente.</p>
 
 <form method="post" action="nuevo" >
-    <strong>E-mail de Contacto</strong>: <input type="e-mail" name="e-mail" placeholder="contacto@host.com.ar" class="e-mail" required><br />
-    <strong>Nombre y Apellido</strong>: <input type="text" name="Nombre" placeholder="Nombre y Apellido" class="text" required><br />
-    <strong>Dominio (dirección del sitio)</strong>: <input type="text" name="Dominio" placeholder="URL o dominio" class="text"><br />
-    <strong>Importancia</strong>: <select name="Importancia"><br />
-        <option value="Moderada" selected="selected">Moderada</option>
-        <option value="Bastante">Bastante</option>
-        <option value="Crítica">Crítica</option>
-    </select>
+    <div style="width:90%;padding:1em;">
+        <strong>E-mail de Contacto</strong>: <input type="e-mail" name="e-mail" placeholder="contacto@host.com.ar" class="e-mail" style="float: right;" required><br />
+    </div>
+    <div style="width:90%;padding:1em;">
+        <strong>Nombre y Apellido</strong>: <input type="text" name="Nombre" placeholder="Nombre y Apellido" class="text" style="float: right;" required><br />
+    </div>
+    <div style="width:90%;padding:1em;">
+        <strong>Dominio (dirección del sitio)</strong>: <input type="text" name="Dominio" placeholder="URL o dominio" class="text" style="float: right;" ><br />
+    </div>
+    <div style="width:90%;padding:1em;">
+        <strong>Importancia</strong>: <select name="Importancia" style="float:right;"><br />
+            <option value="Moderada" selected="selected">Moderada</option>
+            <option value="Bastante">Bastante</option>
+            <option value="Crítica">Crítica</option>
+        </select>
+    </div>
     <br />
-    <textarea rows="20" cols="80" name="Desc" placeholder="Describa aquí el motivo de la apertura del ticket..." required></textarea>
-    <br />
-    <input type="submit" value="Crear Ticket">
+    <div style="width:90%;padding:1em;">
+        <textarea rows="20" cols="80" name="Desc" placeholder="Describa aquí el motivo de la apertura del ticket..." required></textarea>
+    </div>
+    
+    <br /><input type="submit" value="Crear Ticket" style="text-align: center; padding: 2px;"><br />
 </form>

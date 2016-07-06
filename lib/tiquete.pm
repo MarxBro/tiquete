@@ -29,6 +29,14 @@ use List::MoreUtils     "first_index";
 
 #Usar CSV es malo, pero es mas facil pa que la gilada despues use excel y se arregle
 
+
+#Hacer:
+#* Mostrar todos los tickets al admin
+#* Logs to file: implementar
+#* Limites de tickets permitidos
+#* Mailing -> todo!
+
+
 #-------------------------------------------------------
 #                                           VARIABLES
 #-------------------------------------------------------
@@ -49,7 +57,7 @@ our $VERSION = '0.1';
 # ___) | | |_| | | |_) |  ___) |
 #|____/   \___/  |____/  |____/ 
 ######################################################################
-                               
+
 sub leer_db {
     my @archivo = read_file(config->{'data'}, { binmode => ':utf8'});
     @csv_file = @archivo;
@@ -226,6 +234,15 @@ get '/ticket/:ID' => sub {
     my $EST  = $T{$tik_id}{'7estado'} || config->{'default_tik_st'}; 
     my $DEVO = $T{$tik_id}{'8devolucion'} || config->{'default_tik_dev'};
     #'Ticket asignado para su pronta resolución.'; 
+    my $colorin_estado = 'red';
+
+    if ($EST eq 'cerrado'){
+        $colorin_estado = 'green';
+    } elsif ($EST eq "config->{'default_tik_st'}"){
+        $colorin_estado = 'red';
+    } else {
+        $colorin_estado = 'yellow';
+    }
 
     template 'tik', { 
         Nombre =>       $T{$tik_id}{'2nombre'}, 
@@ -238,15 +255,29 @@ get '/ticket/:ID' => sub {
         Estado =>       $EST,
         Devolucion =>   $DEVO,
         precio =>       config->{'precio_hora_soporte'}, 
+        color =>        $colorin_estado,
     };
 };
 
 ######################################################################
 #                                                       Admins
-get '/all' => sub {
+get '/all/:pass' => sub {
+    my $u_pa = params->{'pass'};
+    unless ($u_pa eq config->{pass_admin}){
+        status 'not_found';
+        template '404', { path => request->path };
+    }
+
     my %abiertos = ();
     my %cerrados = ();
-    template 'all', { abiertos => \%abiertos, cerrados => \%cerrados};
+    foreach my $k (keys %T){
+        if ($T{$k}{'7estado'} !~ m"cerrado"gi){
+            $abiertos{$k} = $T{$k};
+        } else {
+            $cerrados{$k} = $T{$k};
+        }
+    }
+    template 'all', { abiertos => \%abiertos, cerrados => \%cerrados, fecha => $hoy_ahora};
 };
 
 get '/all/cli' => sub {
@@ -263,6 +294,24 @@ get '/all/cli' => sub {
 get '/ticket/:ID/done/:pass' => sub{
     my $tik_id = params->{'ID'};
     my $u_pa = params->{'pass'};
+    
+    my $EST  = $T{$tik_id}{'7estado'} || config->{'default_tik_st'}; 
+    my $DEVO = $T{$tik_id}{'8devolucion'} || config->{'default_tik_dev'};
+    
+    my $colorin_estado = 'red';
+    if ($EST eq 'cerrado'){
+        $colorin_estado = 'green';
+    } elsif ($EST eq "config->{'default_tik_st'}"){
+        $colorin_estado = 'red';
+    } else {
+        $colorin_estado = 'yellow';
+    }
+    
+    my $aviso = config->{'devolucion_primera'};
+    unless ($DEVO){
+        $aviso = config->{'devolucion_retoques'};
+    }
+
     if ($u_pa eq config->{pass_admin}){
         template 'fix_ticket', { 
             Nombre =>       $T{$tik_id}{'2nombre'}, 
@@ -274,6 +323,10 @@ get '/ticket/:ID/done/:pass' => sub{
             ID =>           $T{$tik_id}{'0ID'}, 
             #path =>         request->path, 
             pass => $u_pa,
+            color =>        $colorin_estado,
+            estado => $EST,
+            devolucion => $DEVO,
+            aviso => $aviso,
         };
     } else {
         status 'not_found';

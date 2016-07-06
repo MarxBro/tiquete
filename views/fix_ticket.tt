@@ -1,12 +1,7 @@
 <h2>--- <% ID %> ---</h2>
 <div id="tiq">
-<h3>Status: 
-<% IF Estado %>
-<% Estado %>
-<% ELSE %>
-Abierto !!
-<% END %>
-</h3>
+<h3>Ticket Status: <span style="color: <% color %>;font-size: 185%; text-transform: uppercase; float: right;"><% estado %></span></h3>
+
     <div id="subido">
         <h3>Nombre</h3>       <pre><% Nombre %></pre>
         <h3>Dominio</h3>      <pre><% Dominio %></pre>
@@ -16,21 +11,21 @@ Abierto !!
         <h3>Fecha</h3>        <pre><% Fecha %></pre>
     </div>
 
+    <span style="font-size 150%;"><% aviso %></span>
+    
     <div id="respuesta">
-
-
     <form method="post" action="/fix" >
         <strong>Estado del ticket</strong>: <select name="ESTADO"><br />
             <option value="cerrado" selected="selected">Cerrado</option>
             <option value="soporte">Soporte Requerido</option>
         </select>
         <br />
-        <textarea rows="20" cols="80" name="Devo" placeholder="Devolución para el cliente." required></textarea>
+        <textarea rows="20" cols="80" name="Devo" required><% devolucion %></textarea>
         <br />
         <input type="hidden" value="<% pass %>" name="pass">
         <input type="hidden" value="<% ID %>" name="ID">
         <input type="submit" value="Actualizar Ticket">
     </form>
-
     </div>
+
 </div>

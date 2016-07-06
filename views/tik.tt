@@ -1,6 +1,6 @@
 <h2>--- <% ID %> ---</h2>
 <div id="tiq">
-<h3>Ticket Status: <% Estado %></h3>
+<h3>Ticket Status: <span style="color: <% color %>;font-size: 185%; text-transform: uppercase; float: right;"><% Estado %></span></h3>
     <div id="subido">
         <h3>Nombre</h3>       <pre><% Nombre %></pre>
         <h3>Dominio</h3>      <pre><% Dominio %></pre>

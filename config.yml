@@ -18,6 +18,15 @@ charset: "UTF-8"
 # simple: default and very basic template engine
 # template_toolkit: TT
 
+# Log engine
+# logger: "console"
+#logger: "File"
+#engines:
+    #logger:
+        #File:
+            #log_dir: "/var/log/myapp"
+            #file_name: "myapp.log"
+
 #template: "simple"
 template: "template_toolkit"
 engines:
@@ -26,14 +35,15 @@ engines:
        start_tag: '<%'
        end_tag:   '%>'
 
+
 data: lib/tickets.csv
-mail_contacto: c@hipermegared.com.ar
-mail_webmaster: w@hipermegared.com.ar
 pass_admin: secretisimo123
 
 
 # Mails! Para enviar desde la app.
 mail_enable: 0
+mail_contacto: c@hipermegared.com.ar
+mail_webmaster: w@hipermegared.com.ar
 mail_send_from: tickets@hipermegared.com.ar
 mail_send_reply: c@hipermegared.com.ar
 mail_send_encoding: ISO-8859-1
@@ -48,3 +58,8 @@ default_tik_st: "Abierto"
 default_tik_dev: "Ticket asignado para su pronta resoluci&oacute;n. Vuelva pronto!"
 min_longitud_descripcion_tik: 30
 precio_hora_soporte: "$400"
+
+
+
+devolucion_primera: "Escriba debajo la devolución para el cliente."
+devolucion_retoques: "Cuidado! esta retocando la devolución prexistente."

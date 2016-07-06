@@ -1,19 +1,98 @@
         <h2>Tickets Abiertos</h2>
         <table>
         <tr>
-            <th colspan="1">Fecha</th>
-            <th colspan="2">Nombre Cliente</th>
-            <th colspan="3">Contacto</th>
-            <th colspan="4">Dominio</th>
-            <th colspan="5">Descripción</th>
-            <th colspan="6">Importancia</th>
-            <th colspan="7">ID</th>
+            <th >ID</th>
+            <th >Mail Contacto</th>
+            <th >Nombre Cliente</th>
+            <th >Dominio</th>
+            <th >Importancia</th>
+            <th >Descripcion</th>
+            <th >Fecha</th>
+            <th >Estado</th>
+            <th >Respuesta</th>
         </tr>
         
         <!-- loopear -->
+        <% FOR k in abiertos.keys.sort %>
         <tr>
-            <td>
-            </td>
+            <% FOR coso in abiertos.$k.keys.sort %>
+                <% IF abiertos.$k.$coso %>
+                    <% IF abiertos.$k.$coso == "soporte" %>
+                        <td bgcolor="yellow">
+                            <% abiertos.$k.$coso %>
+                        </td>
+                    <% ELSIF abiertos.$k.$coso == "Crítica" %>
+                        <td bgcolor="red">
+                            <% abiertos.$k.$coso %>
+                        </td>
+                    <% ELSIF abiertos.$k.$coso == "Bastante" %>
+                        <td bgcolor="orange">
+                            <% abiertos.$k.$coso %>
+                        </td>
+                    <% ELSE %>
+                        <td>
+                            <% abiertos.$k.$coso %>
+                        </td>
+                    <% END %>
+                <% ELSE %>
+                    <% IF coso == '7estado' %>
+                    <% ABIERTO ='abierto' %>
+                        <td bgcolor="red">
+                            <% ABIERTO %>
+                        </td>
+                    <% ELSE %>
+                        <td bgcolor="#ddd">
+                            <% abiertos.$k.$coso %>
+                        </td>
+                    <% END %>
+                <% END %>
+            <% END %>
         </tr>
-        
+        <% END %>
         </table>
+
+
+        <h2>Tickets Cerrados</h2>
+        <table>
+        <tr>
+            <th >ID</th>
+            <th >Mail Contacto</th>
+            <th >Nombre Cliente</th>
+            <th >Dominio</th>
+            <th >Importancia</th>
+            <th >Descripcion</th>
+            <th >Fecha</th>
+            <th >Estado</th>
+            <th >Respuesta</th>
+        </tr>
+        <!-- loopear -->
+        <% FOR k in cerrados.keys.sort %>
+        <tr>
+            <% FOR coso in cerrados.$k.keys.sort %>
+                <% IF cerrados.$k.$coso %>
+                    <td>
+                        <% cerrados.$k.$coso %>
+                    </td>
+                <% ELSE %>
+                    <td bgcolor="#ddd">
+                        <% cerrados.$k.$coso %>
+                    </td>
+                <% END %>
+            <% END %>
+        </tr>
+        <% END %>
+        </table>
+
+<div id="mo">Último acceso: <% fecha %></div>
+
+<!--
+* 0     ID
+* 1     mail
+* 2     nombre
+* 3     dominio
+* 4     importancia
+* 5     descripcion
+* --6   fecha
+* ++7   estado
+* ++8   devolucion
+-->
