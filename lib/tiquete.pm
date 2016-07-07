@@ -43,6 +43,7 @@ use List::MoreUtils     "first_index";
 my $hoy_ahora = strftime ("%d / %B / %Y %H:%M:%S",localtime(time()));
 #my $TIK = read_file ($config->{tiquete}{data});
 my %T = ();
+my @limitados = ();
 my @fields_csv = qw( 0ID 1mail 2nombre 3dominio 4importancia 5descripcion 6fecha 7estado 8devolucion );
 my $tik_id = 3;
 my @csv_file = ();
@@ -139,10 +140,24 @@ sub split_lines {
     return $i;
 }
 
-#sub hash_to_csv {
-    #my $id = shift;
-    #}
+sub get_mails_with_open_tiks {
+    my %temp = ();
+    my @lims = ();
+    foreach my $k (keys %T){
+        if ($T{$k}{'7estado'} !~ m"cerrado"gi){
+            my $mail_ppl = $T{$k}{'1mail'};
+            $temp{ $mail_ppl }++;
+            push ( @lims, $mail_ppl ) if ( $temp{$mail_ppl} == config->{'max_tiks_per_mail'} );
+        }
+    }
+    @limitados = @lims;
+}
 
+sub gente_limitada {
+    my $b = shift;
+    get_mails_with_open_tiks();
+    return ( $b ~~ @limitados );
+}
 
 ######################################################################
 #|  _ \  / \  | \ | |/ ___| ____|  _ \  |  _ \ / \  |  _ \_   _|
@@ -190,6 +205,12 @@ post '/nuevo' => sub {
     if (length($descripcion) < config->{'min_longitud_descripcion_tik'}){
         my $titu = 'Error: descripción';
         my $ms = 'La descripción es demasiado corta. Intente nuevamente.'; 
+        status 'bad_request';
+        return template 'simple', { titulo => $titu, mensaje => $ms };
+    }
+    if (gente_limitada($email)){
+        my $titu = 'Error: Muchos Tickets Abiertos';
+        my $ms = 'Usted alcanzó el límite máximo de tickets abiertos posible.'; 
         status 'bad_request';
         return template 'simple', { titulo => $titu, mensaje => $ms };
     }

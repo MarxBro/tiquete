@@ -35,7 +35,7 @@ engines:
        start_tag: '<%'
        end_tag:   '%>'
 
-
+# M A I N
 data: lib/tickets.csv
 pass_admin: secretisimo123
 
@@ -50,8 +50,7 @@ mail_send_encoding: ISO-8859-1
 mail_send_charset: quoted-printable
 
 # Configuraciones para limitar la cantidad de tickets abiertos por dominio/Contacto
-maximos_tickets_per_mail: 3
-maximos_tickets_per_domain: 1
+max_tiks_per_mail: 3
 
 # defaults para los ticketes
 default_tik_st: "Abierto"
@@ -59,7 +58,24 @@ default_tik_dev: "Ticket asignado para su pronta resoluci&oacute;n. Vuelva pront
 min_longitud_descripcion_tik: 30
 precio_hora_soporte: "$400"
 
-
-
 devolucion_primera: "Escriba debajo la devolución para el cliente."
 devolucion_retoques: "Cuidado! esta retocando la devolución prexistente."
+
+#Mail templates
+
+mail_tmpl_id: "El ID es: "
+mail_tmpl_url: "La URL es: "
+mail_tmpl_pie: "---\nc@hipermegared.com.ar\nHMR. 2016"
+
+- >
+Su ticket se ha inicializado exitosamente.
+Este mensaje confirma su llegada a los administradores para su pronta resolución.
+Le recomendamos conservar el link y el identificador de su ticket para futura referencia.
+
+
+- >
+Se abrió un nuevo ticket.
+
+- >
+Se cerró su previo ticket.
+
