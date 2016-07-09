@@ -66,16 +66,12 @@ devolucion_retoques: "Cuidado! esta retocando la devolución prexistente."
 mail_tmpl_id: "El ID es: "
 mail_tmpl_url: "La URL es: "
 mail_tmpl_pie: "---\nc@hipermegared.com.ar\nHMR. 2016"
-
-#- >
-    #Su ticket se ha inicializado exitosamente.
-    #Este mensaje confirma su llegada a los administradores para su pronta resolución.
-    #Le recomendamos conservar el link y el identificador de su ticket para futura referencia.
-
-
-#- >
-    #Se abrió un nuevo ticket.
-
-#- >
-    #Se cerró su previo ticket.
+mail_tik_inicio: |
+    Su ticket se ha inicializado exitosamente.
+    Este mensaje confirma su llegada a los administradores para su pronta resolución.
+    Le recomendamos conservar el link y el identificador de su ticket para futura referencia.
+mail_tik_open: |
+    Se abrió un nuevo ticket.
+mail_tik_closed: |
+    Se cerró su previo ticket.
 
