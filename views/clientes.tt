@@ -1,8 +1,8 @@
 <h2>Tickets abiertos por <% mail %></h2>
 
 <ul>
-<% FOR m in ids %>
-<li><a href="/ticket/<% m %>"><% m %></a></li>
-<% END %>
+    <% FOR m in ids %>
+        <li><a href="/ticket/<% m %>"><% m %></a></li>
+    <% END %>
 </ul>
 

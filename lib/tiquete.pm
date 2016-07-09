@@ -2,6 +2,14 @@ package tiquete;
 use Dancer2;
 use Dancer2::Plugin::Auth::Extensible;
 
+# |    o               |         
+# |--- .,---..   .,---.|--- ,---.
+# |    ||   ||   ||---'|    |---'
+# `---'``---|`---'`---'`---'`---'
+#           |                    
+# ------------------------------->>
+
+
 #use utf8;
 use POSIX q/strftime/;
 #use Pod::Usage;
@@ -193,7 +201,7 @@ sub permission_denied_page_handler {
 #|____/_/   \_\_| \_|\____|_____|_| \_\ |_| /_/   \_\_| \_\|_|  
 ######################################################################
 
-#------------------------       Hook
+#    ><(((º> j\--------------------======o       Hook
 
 hook before => sub {
     leer_db();
@@ -203,7 +211,7 @@ hook before => sub {
 ######################################################################
 #                                                       Home
 get '/' => sub {
-    template 'home', { fecha => $hoy_ahora, debug => \%T };
+    template 'home', { fecha => $hoy_ahora };
 };
 
 ######################################################################
@@ -257,15 +265,10 @@ post '/nuevo' => sub {
     redirect "/ticket/$ID_new";
 };
 
-#get '/subido/:ID' => sub {
-    #my $tik_id = params->{'ID'} || template '404', { path => request->path };
-    #my $tik_uri = '/ticket/' . $tik_id;
-    #template 'subido', { URL_NN => $tik_uri };
-#};
-
 
 ######################################################################
 #                                                       Leer
+#Vinculeado desde el home
 post '/ticket' => sub {
     my $tik_id = params->{'ID'};
     if ("$tik_id" ~~ [ keys %T ]){
@@ -276,6 +279,7 @@ post '/ticket' => sub {
     }
 };
 
+#Vinculeado desde el home
 post '/tickets' => sub {
     my $tik_mail = params->{'mail'};
     if ("$tik_mail" ~~ [ keys %M ]){
@@ -284,6 +288,12 @@ post '/tickets' => sub {
         status 'not_found';
         template '404', { path => request->path . '/' . $tik_mail };
     }
+};
+
+#Evitar que elsistema de tickets renderee cualka
+get '/ticket' => sub {
+    status 'not_found';
+    template '404', { path => request->path };
 };
 
 get '/ticket/:ID' => sub {
@@ -296,7 +306,6 @@ get '/ticket/:ID' => sub {
     #Defaults
     my $EST  = $T{$tik_id}{'7estado'} || config->{'default_tik_st'}; 
     my $DEVO = $T{$tik_id}{'8devolucion'} || config->{'default_tik_dev'};
-    #'Ticket asignado para su pronta resolución.'; 
     my $colorin_estado = 'red';
 
     if ($EST eq 'cerrado'){
@@ -322,22 +331,22 @@ get '/ticket/:ID' => sub {
     };
 };
 
+#### Clientes
+#Evitar que elsistema de tickets renderee cualka
+get '/clientes' => sub {
+    status 'not_found';
+    template '404', { path => request->path };
+};
 get '/clientes/:mm' => sub {
     my $mm = params->{'mm'};
     template 'clientes', { ids => $M{$mm} , mail => $mm};
 };
 
 
+
 ######################################################################
 #                                                       Admins
 get '/all' => require_login sub {
-#get '/all/:pass' => sub {
-    #my $u_pa = params->{'pass'};
-    #unless ($u_pa eq config->{pass_admin}){
-        #status 'not_found';
-        #template '404', { path => request->path };
-    #}
-
     my %abiertos = ();
     my %cerrados = ();
     foreach my $k (keys %T){
@@ -363,8 +372,6 @@ get '/all/cli' => sub {
 # REQUIEREN Pass !
 get '/ticket/:ID/done' => require_login sub{
     my $tik_id = params->{'ID'};
-    #my $u_pa = params->{'pass'};
-    
     my $EST  = $T{$tik_id}{'7estado'} || config->{'default_tik_st'}; 
     my $DEVO = $T{$tik_id}{'8devolucion'} || config->{'default_tik_dev'};
     
@@ -382,55 +389,40 @@ get '/ticket/:ID/done' => require_login sub{
         $aviso = config->{'devolucion_retoques'};
     }
 
-    #if ($u_pa eq config->{pass_admin}){
-        template 'fix_ticket', { 
-            Nombre =>       $T{$tik_id}{'2nombre'}, 
-            Dominio =>      $T{$tik_id}{'3dominio'}, 
-            Contacto =>     $T{$tik_id}{'1mail'}, 
-            Importancia =>  $T{$tik_id}{'4importancia'}, 
-            Descripcion =>  join_lines($T{$tik_id}{'5descripcion'}), 
-            Fecha =>        scalar localtime $T{$tik_id}{'6fecha'}, 
-            ID =>           $T{$tik_id}{'0ID'}, 
-            #path =>         request->path, 
-            #pass => $u_pa,
-            color =>        $colorin_estado,
-            estado => $EST,
-            devolucion => $DEVO,
-            aviso => $aviso,
-        };
-    #} else {
-        #status 'not_found';
-        #template '404', { path => request->path };
-    #}
+    template 'fix_ticket', { 
+       Nombre       =>  $T{$tik_id}{'2nombre'}, 
+       Dominio      =>  $T{$tik_id}{'3dominio'}, 
+       Contacto     =>  $T{$tik_id}{'1mail'}, 
+       Importancia  =>  $T{$tik_id}{'4importancia'}, 
+       Descripcion  =>  join_lines($T{$tik_id}{'5descripcion'}), 
+       Fecha        =>  scalar localtime $T{$tik_id}{'6fecha'}, 
+       ID           =>  $T{$tik_id}{'0ID'}, 
+       color        =>  $colorin_estado,
+       estado       =>  $EST,
+       devolucion   =>  $DEVO,
+       aviso        =>  $aviso,
+    };
 };
 
 post '/fix' => require_login sub {
     my $tik_id = params->{'ID'};
-    #my $u_pa = params->{'pass'};
     my $estado = params->{'ESTADO'};
     my $devolucion = join_lines(params->{'Devo'});
 
-    #if ($u_pa eq config->{pass_admin}){
-        #do stuff
-        my $index_of_ticket = first_index {/$tik_id/} @csv_file;
-        my $ln_par_laburar  = $csv_file[$index_of_ticket];
-        #sacar los saltos de línea que pueda tener: usamos un puto CSV!
-        $ln_par_laburar     =~ s/\r//g;
-        $ln_par_laburar     =~ s/\n//g;
-        my $append_to_csv   = $sep . $estado . $sep . $devolucion . "\n";
-        $ln_par_laburar     .= $append_to_csv;
-        $csv_file[$index_of_ticket] = $ln_par_laburar;
-        # al final: escribir de nuevo y redireccionar (el hook recarga la data)
-        write_file(config->{'data'}, { binmode => ':utf8'}, @csv_file);
-        redirect "/ticket/$tik_id";
-    #} else{
-        #status 'not_found';
-        #template '404', { path => request->path };
-    #}
+    my $index_of_ticket = first_index {/$tik_id/} @csv_file;
+    my $ln_par_laburar  = $csv_file[$index_of_ticket];
+    $ln_par_laburar     =~ s/\r//g;
+    $ln_par_laburar     =~ s/\n//g;
+    my $append_to_csv   = $sep . $estado . $sep . $devolucion . "\n";
+    $ln_par_laburar     .= $append_to_csv;
+    $csv_file[$index_of_ticket] = $ln_par_laburar;
+    # al final: escribir de nuevo y redireccionar (el hook recarga la data)
+    write_file(config->{'data'}, { binmode => ':utf8'}, @csv_file);
+    redirect "/ticket/$tik_id";
 };
 
 ######################################################################
-# Auth rulesssss
+# Auth rules: Copy-pastiado y simple / garlompo
 post '/login' => sub {
         my ($success, $realm) = authenticate_user(
             params->{username}, params->{password}
@@ -438,16 +430,14 @@ post '/login' => sub {
         if ($success) {
             session logged_in_user => params->{username};
             session logged_in_user_realm => $realm;
-            # other code here
         } else {
-            # authentication failed
             redirect '/login';
         }
 };
     
 any '/logout' => sub {
     session->destroy;
-    #redirect '/';
+    redirect '/';
 };
 
 ######################################################################
@@ -456,7 +446,6 @@ any qr{.*} => sub {
     status 'not_found';
     template '404', { path => request->path };
 }; 
-
 
 
 true;
