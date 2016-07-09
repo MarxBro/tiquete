@@ -1,5 +1,6 @@
 package tiquete;
 use Dancer2;
+use Dancer2::Plugin::Auth::Extensible;
 
 #use utf8;
 use POSIX q/strftime/;
@@ -170,6 +171,21 @@ sub gente_limitada {
     return ( $b ~~ @limitados );
 }
 
+#    _   _   _ _____ _   _ 
+#   / \ | | | |_   _| | | |
+#  / _ \| | | | | | | |_| |
+# / ___ \ |_| | | | |  _  |
+#/_/   \_\___/  |_| |_| |_|
+#                          
+
+sub login_page_handler {
+    template 'login';
+}
+
+sub permission_denied_page_handler {
+    template 'login';
+}
+
 ######################################################################
 #|  _ \  / \  | \ | |/ ___| ____|  _ \  |  _ \ / \  |  _ \_   _|
 #| | | |/ _ \ |  \| | |   |  _| | |_) | | |_) / _ \ | |_) || |  
@@ -314,12 +330,13 @@ get '/clientes/:mm' => sub {
 
 ######################################################################
 #                                                       Admins
-get '/all/:pass' => sub {
-    my $u_pa = params->{'pass'};
-    unless ($u_pa eq config->{pass_admin}){
-        status 'not_found';
-        template '404', { path => request->path };
-    }
+get '/all' => require_login sub {
+#get '/all/:pass' => sub {
+    #my $u_pa = params->{'pass'};
+    #unless ($u_pa eq config->{pass_admin}){
+        #status 'not_found';
+        #template '404', { path => request->path };
+    #}
 
     my %abiertos = ();
     my %cerrados = ();
@@ -344,9 +361,9 @@ get '/all/cli' => sub {
 
 # Rutas para dar una tarea por finalizada y agregar devolución
 # REQUIEREN Pass !
-get '/ticket/:ID/done/:pass' => sub{
+get '/ticket/:ID/done' => require_login sub{
     my $tik_id = params->{'ID'};
-    my $u_pa = params->{'pass'};
+    #my $u_pa = params->{'pass'};
     
     my $EST  = $T{$tik_id}{'7estado'} || config->{'default_tik_st'}; 
     my $DEVO = $T{$tik_id}{'8devolucion'} || config->{'default_tik_dev'};
@@ -365,7 +382,7 @@ get '/ticket/:ID/done/:pass' => sub{
         $aviso = config->{'devolucion_retoques'};
     }
 
-    if ($u_pa eq config->{pass_admin}){
+    #if ($u_pa eq config->{pass_admin}){
         template 'fix_ticket', { 
             Nombre =>       $T{$tik_id}{'2nombre'}, 
             Dominio =>      $T{$tik_id}{'3dominio'}, 
@@ -375,25 +392,25 @@ get '/ticket/:ID/done/:pass' => sub{
             Fecha =>        scalar localtime $T{$tik_id}{'6fecha'}, 
             ID =>           $T{$tik_id}{'0ID'}, 
             #path =>         request->path, 
-            pass => $u_pa,
+            #pass => $u_pa,
             color =>        $colorin_estado,
             estado => $EST,
             devolucion => $DEVO,
             aviso => $aviso,
         };
-    } else {
-        status 'not_found';
-        template '404', { path => request->path };
-    }
+    #} else {
+        #status 'not_found';
+        #template '404', { path => request->path };
+    #}
 };
 
-post '/fix' => sub{
+post '/fix' => require_login sub {
     my $tik_id = params->{'ID'};
-    my $u_pa = params->{'pass'};
+    #my $u_pa = params->{'pass'};
     my $estado = params->{'ESTADO'};
     my $devolucion = join_lines(params->{'Devo'});
 
-    if ($u_pa eq config->{pass_admin}){
+    #if ($u_pa eq config->{pass_admin}){
         #do stuff
         my $index_of_ticket = first_index {/$tik_id/} @csv_file;
         my $ln_par_laburar  = $csv_file[$index_of_ticket];
@@ -406,12 +423,32 @@ post '/fix' => sub{
         # al final: escribir de nuevo y redireccionar (el hook recarga la data)
         write_file(config->{'data'}, { binmode => ':utf8'}, @csv_file);
         redirect "/ticket/$tik_id";
-    } else{
-        status 'not_found';
-        template '404', { path => request->path };
-    }
+    #} else{
+        #status 'not_found';
+        #template '404', { path => request->path };
+    #}
 };
 
+######################################################################
+# Auth rulesssss
+post '/login' => sub {
+        my ($success, $realm) = authenticate_user(
+            params->{username}, params->{password}
+        );
+        if ($success) {
+            session logged_in_user => params->{username};
+            session logged_in_user_realm => $realm;
+            # other code here
+        } else {
+            # authentication failed
+            redirect '/login';
+        }
+};
+    
+any '/logout' => sub {
+    session->destroy;
+    #redirect '/';
+};
 
 ######################################################################
 # Regla para agarrar cualquier error o balazo cósmico.

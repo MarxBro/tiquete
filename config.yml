@@ -35,6 +35,26 @@ engines:
        start_tag: '<%'
        end_tag:   '%>'
 
+
+plugins:
+    Auth::Extensible:
+        login_page_handler: 'tiquete::login_page_handler'
+        permission_denied_page_handler: 'tiquete::permission_denied_page_handler'
+        disable_roles: 1
+        user_home_page: '/all'
+        exit_page: '/'
+        realms:
+            config:
+                provider: Config
+                users:
+                    - user: admin
+                      pass: secretisimo123
+
+
+
+
+
+
 # M A I N
 data: lib/tickets.csv
 pass_admin: secretisimo123

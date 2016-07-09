@@ -1,6 +1,9 @@
 <h1>HMR: Área de Soporte Técnico</h1>
-<h2><a href="/nuevo">Crear un nuevo Ticket</a></h2>
-<p>Puede crear un nuevo ticket cliqueando en el título.</p>
+
+
+<h2> Crear un nuevo Ticket </h2>
+<a href="/nuevo"><img src="/images/tik.png" alt="Crear un nuevo ticket"/></a>
+
 
 <h2>Ver el estado de mi Ticket</h2>
 <p>Para revisar el estado de algún ticket emitido previamente, <strong>utilice el id asignado</strong>.</p>
@@ -8,6 +11,7 @@
 <input name="ID" class="text" type="text" placeholder="id1231">
 <input name="submit" class="text" type="submit">
 </form>
+
 
 <p>Para revisar el estado de <strong>todos sus tickets utilice su direccion de contacto</strong>.</p>
 <form action="/tickets" method="post">

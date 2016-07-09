@@ -1,5 +1,6 @@
         <h2>Tickets Abiertos</h2>
-        <table>
+
+        <table frame="box" style="padding: 1em;">
         <tr>
             <th >IDENTIFICADOR</th>
             <th >Mail Contacto</th>
@@ -65,9 +66,9 @@
 
 
         <h2>Tickets Cerrados</h2>
-        <table>
+        <table frame="box" style="padding: 1em;">
         <tr>
-            <th >ID</th>
+            <th >IDENTIFICADOR</th>
             <th >Mail Contacto</th>
             <th >Nombre Cliente</th>
             <th >Dominio</th>
@@ -100,7 +101,7 @@
         <% END %>
         </table>
 
-<div id="mo">Último acceso: <% fecha %></div>
+<div id="mo" style="padding:2em;float:right"><a href="/logout">S A L I R</a> -- Último acceso: <% fecha %></div>
 
 <!--
 * 0     ID

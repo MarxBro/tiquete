@@ -18,7 +18,7 @@ Proyecto de Ticket-system en Dancer2, con csv, mails y la mar en coche.
 
 La fecha es automática.
 
-El estado y la devoluciçon so potestad del admin.
+El estado y la devolución so potestad del admin.
 
 
 # Deply bb
@@ -31,4 +31,8 @@ plackup -p 3000 bin/app.psgi
 # Falta
 
 * Deploy con mailing (no pude probar nada hasta ahora)
-* Agregarle un mecanismo de login menos improvisado!
+* Agregarle un mecanismo de login menos improvisado! (mediante `cpanp i Dancer2::Plugin::Auth::Extensible`).
+
+## La perra...
+
+Aparentemente necesita un chillón de módulos para funkar...

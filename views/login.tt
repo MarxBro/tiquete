@@ -1,0 +1,18 @@
+
+<h1>Autentificación Requerida</h1>
+
+<p> Necesita identificarse para ver esto.  </p>
+
+
+
+<form method="post">
+    <label for="username">Usuario:</label>
+    <input type="text" name="username" id="username">
+    <br />
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password">
+    <br />
+    <input type="hidden" name="return_url" value="/all">
+    <input type="submit" value="Login">
+
+</form>
