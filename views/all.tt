@@ -29,6 +29,18 @@
                         <td bgcolor="orange">
                             <% abiertos.$k.$coso %>
                         </td>
+                    <% ELSIF coso == "0ID" %>
+                        <td>
+                            <a href="/ticket/<% abiertos.$k.$coso %>" target="_blank"><% abiertos.$k.$coso %></a>
+                        </td>
+                    <% ELSIF coso == "3dominio" %>
+                        <td>
+                            <a href="http://<% abiertos.$k.$coso %>" target="_blank"><% abiertos.$k.$coso %></a>
+                        </td>
+                    <% ELSIF coso == "1mail" %>
+                        <td>
+                            <a href="mailto:<% abiertos.$k.$coso %>"><% abiertos.$k.$coso %></a>
+                        </td>
                     <% ELSE %>
                         <td>
                             <% abiertos.$k.$coso %>
@@ -70,6 +82,11 @@
         <tr>
             <% FOR coso in cerrados.$k.keys.sort %>
                 <% IF cerrados.$k.$coso %>
+                    <% IF coso == "0ID" %>
+                        <td>
+                            <a href="/ticket/<% cerrados.$k.$coso %>"><% cerrados.$k.$coso %></a>
+                        </td>
+                    <% END %>
                     <td>
                         <% cerrados.$k.$coso %>
                     </td>

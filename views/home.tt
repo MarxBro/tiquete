@@ -9,6 +9,11 @@
 <input name="submit" class="text" type="submit">
 </form>
 
+<p>Para revisar el estado de <strong>todos sus tickets utilice su direccion de contacto</strong>.</p>
+<form action="/tickets" method="post">
+<input name="mail" class="text" type="email" placeholder="alguien@aca.com">
+<input name="submit" class="text" type="submit">
+</form>
 
 
 <h1>Acerca de los Tickets</h2>
@@ -31,4 +36,4 @@
 </ul> </div>
 -->
 
-<div id="mo">Último acceso: <% fecha %></div>
+<div id="mo" style="float:right;">Último acceso: <% fecha %></div>

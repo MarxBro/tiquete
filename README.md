@@ -27,3 +27,8 @@ El estado y la devoluciçon so potestad del admin.
 ```bash
 plackup -p 3000 bin/app.psgi
 ```
+
+# Falta
+
+* Deploy con mailing (no pude probar nada hasta ahora)
+* Agregarle un mecanismo de login menos improvisado!

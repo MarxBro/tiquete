@@ -7,7 +7,7 @@ use POSIX q/strftime/;
 use File::Slurp;
 use feature             "say";
 use Data::Uniqid        "luniqid";
-#use Email::MIME;
+use Email::MIME;
 use List::MoreUtils     "first_index";
 
 # Data estructure
@@ -43,6 +43,7 @@ use List::MoreUtils     "first_index";
 my $hoy_ahora = strftime ("%d / %B / %Y %H:%M:%S",localtime(time()));
 #my $TIK = read_file ($config->{tiquete}{data});
 my %T = ();
+my %M = ();
 my @limitados = ();
 my @fields_csv = qw( 0ID 1mail 2nombre 3dominio 4importancia 5descripcion 6fecha 7estado 8devolucion );
 my $tik_id = 3;
@@ -72,6 +73,14 @@ sub leer_db {
         my $tref = \%Tt;
         my $id = $f[0];
         $T{$id} = $tref;
+        #Guardar los mails por separado.
+        my $mail_ppl = $f[1];
+        if ( $M{$mail_ppl} ){
+            push ( @{$M{$mail_ppl}} , $id);
+        } else {
+            my @te = ( $f[0] );    
+            $M{$mail_ppl} = \@te;
+        }
     }
 }
 
@@ -147,7 +156,9 @@ sub get_mails_with_open_tiks {
         if ($T{$k}{'7estado'} !~ m"cerrado"gi){
             my $mail_ppl = $T{$k}{'1mail'};
             $temp{ $mail_ppl }++;
-            push ( @lims, $mail_ppl ) if ( $temp{$mail_ppl} == config->{'max_tiks_per_mail'} );
+            if ( $temp{$mail_ppl} == config->{'max_tiks_per_mail'} ){
+                push ( @lims, $mail_ppl );
+            }
         }
     }
     @limitados = @lims;
@@ -241,7 +252,22 @@ post '/nuevo' => sub {
 #                                                       Leer
 post '/ticket' => sub {
     my $tik_id = params->{'ID'};
-    redirect "/ticket/$tik_id";
+    if ("$tik_id" ~~ [ keys %T ]){
+        redirect "/ticket/$tik_id";
+    } else {
+        status 'not_found';
+        template '404', { path => request->path . '/' . $tik_id };
+    }
+};
+
+post '/tickets' => sub {
+    my $tik_mail = params->{'mail'};
+    if ("$tik_mail" ~~ [ keys %M ]){
+        redirect "/clientes/$tik_mail";
+    } else {
+        status 'not_found';
+        template '404', { path => request->path . '/' . $tik_mail };
+    }
 };
 
 get '/ticket/:ID' => sub {
@@ -259,10 +285,10 @@ get '/ticket/:ID' => sub {
 
     if ($EST eq 'cerrado'){
         $colorin_estado = 'green';
-    } elsif ($EST eq "config->{'default_tik_st'}"){
-        $colorin_estado = 'red';
-    } else {
+    } elsif ($EST eq "soporte"){
         $colorin_estado = 'yellow';
+    } else {
+        $colorin_estado = 'red';
     }
 
     template 'tik', { 
@@ -279,6 +305,12 @@ get '/ticket/:ID' => sub {
         color =>        $colorin_estado,
     };
 };
+
+get '/clientes/:mm' => sub {
+    my $mm = params->{'mm'};
+    template 'clientes', { ids => $M{$mm} , mail => $mm};
+};
+
 
 ######################################################################
 #                                                       Admins

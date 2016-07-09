@@ -67,15 +67,15 @@ mail_tmpl_id: "El ID es: "
 mail_tmpl_url: "La URL es: "
 mail_tmpl_pie: "---\nc@hipermegared.com.ar\nHMR. 2016"
 
-- >
-Su ticket se ha inicializado exitosamente.
-Este mensaje confirma su llegada a los administradores para su pronta resolución.
-Le recomendamos conservar el link y el identificador de su ticket para futura referencia.
+#- >
+    #Su ticket se ha inicializado exitosamente.
+    #Este mensaje confirma su llegada a los administradores para su pronta resolución.
+    #Le recomendamos conservar el link y el identificador de su ticket para futura referencia.
 
 
-- >
-Se abrió un nuevo ticket.
+#- >
+    #Se abrió un nuevo ticket.
 
-- >
-Se cerró su previo ticket.
+#- >
+    #Se cerró su previo ticket.
 
