@@ -114,14 +114,14 @@ sub valid_mail {
 
 # Salio de aca: http://learn.perl.org/examples/email.html
 sub mailing {
-    my $emisor = config->{'mail_send_from'};;
-    my $recipiente = $_[0];
-    my $mensaje = $_[1]; # Lineas separadas con "\n" !
-    my $asunto = $_[2];
-    my $encoding = config->{'mail_send_encoding'};
-    my $charset = config->{'mail_send_charset'};
-    my $rt = config->{'mail_send_reply'};
-    # first, create your message
+    my $emisor          = config->{'MAILING'}{'mail_send_from'};;
+    my $recipiente      = $_[0];
+    my $mensaje         = $_[1]; # Lineas separadas con "\n" !
+    my $asunto          = $_[2];
+    my $encoding        = config->{'MAILING'}{'mail_send_encoding'};
+    my $charset         = config->{'MAILING'}{'mail_send_charset'};
+    my $rt              = config->{'MAILING'}{'mail_send_reply'};
+    
     my $message = Email::MIME->create(
         header_str => [
             From     => $emisor,
