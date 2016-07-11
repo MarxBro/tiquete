@@ -1,7 +1,5 @@
 package tiquete;
-use Dancer2;
-use Dancer2::Plugin::Auth::Extensible;
-use v5.20;
+
 
 # |    o               |         
 # |--- .,---..   .,---.|--- ,---.
@@ -10,39 +8,50 @@ use v5.20;
 #           |                    
 # ------------------------------->>
 
+
+
+use Dancer2;
+use Dancer2::Plugin::Auth::Extensible;
+use v5.20;
 use utf8;
 use POSIX q/strftime/;
 use File::Slurp;
-use feature             "say";
 use Data::Uniqid        "luniqid";
 use Email::MIME;
 use List::MoreUtils     "first_index";
 
-# Data estructure
-# 0     ID
-# 1     mail
-# 2     nombre
-# 3     dominio
-# 4     importancia
-# 5     descripcion
-# --6   fecha
-# ++7   estado
-# ++8   devolucion
+=pod
 
-# La fecha es automática.
-# El estado y la devolución son agregados poe el admin.
-#El sistema tiene que mandar mails cuando:
-#* se abre un nuevo ticket (A los admines + confirmacion para el user?)
-#* se cierra un nuevo ticket (Al user)
+=encoding utf8
 
-#Usar CSV es malo, pero es mas facil pa que la gilada despues use excel y se arregle
+=head1 SYNOPSIS
 
+Script para ticketear como un loco.
 
-#Hacer:
-#* Mostrar todos los tickets al admin
-#* Logs to file: implementar
-#* Limites de tickets permitidos
-#* Mailing -> todo!
+La idea es usarlo para dar soporte... Sep.
+
+=head2 Data structure
+
+=over
+
+=item * 0     ID
+=item * 1     mail
+=item * 2     nombre
+=item * 3     dominio
+=item * 4     importancia
+=item * 5     descripcion
+=item * --6   fecha
+=item * ++7   estado
+=item * ++8   devolucion
+
+=back
+
+La fecha es automática.
+
+El estado y la devolución son agregados poe el admin.
+
+=cut
+
 
 
 #-------------------------------------------------------
@@ -113,34 +122,6 @@ sub valid_mail {
     }
 }
 
-# Salio de aca: http://learn.perl.org/examples/email.html
-sub mailing {
-    my $emisor          = config->{'MAILING'}{'mail_send_from'};;
-    my $recipiente      = $_[0];
-    my $mensaje         = $_[1]; # Lineas separadas con "\n" !
-    my $asunto          = $_[2];
-    my $encoding        = config->{'MAILING'}{'mail_send_encoding'};
-    my $charset         = config->{'MAILING'}{'mail_send_charset'};
-    my $rt              = config->{'MAILING'}{'mail_send_reply'};
-    
-    my $message = Email::MIME->create(
-        header_str => [
-            From     => $emisor,
-            To       => $recipiente,
-            Subject  => $asunto,
-            #Reply-To => $rt,
-        ],
-        attributes => {
-            encoding => $encoding,
-            charset  => $charset,
-        },
-        body_str => $mensaje,
-    );
-
-    # send the message
-    use Email::Sender::Simple qw(sendmail);
-    sendmail($mensaje);
-}
 
 sub give_me_id {
     return luniqid();
@@ -179,6 +160,54 @@ sub gente_limitada {
     get_mails_with_open_tiks();
     return ( $b ~~ @limitados );
 }
+#   -------------->>>
+=pod
+
+=head2 MAILING
+
+El sistema tiene que mandar mails cuando:
+
+=item * Se abre un nuevo ticket (A los admines + confirmacion para el user?)
+=item * Se cierra un nuevo ticket (Al user)
+
+Usar CSV es malo, pero es mas facil pa que la gilada despues use excel y se arregle
+
+
+#Hacer:
+#* Mostrar todos los tickets al admin
+#* Logs to file: implementar
+#* Limites de tickets permitidos
+#* Mailing -> todo!
+
+=cut
+# Salio de aca: http://learn.perl.org/examples/email.html
+sub mailing {
+    my $emisor          = config->{'MAILING'}{'mail_send_from'};;
+    my $recipiente      = $_[0];
+    my $mensaje         = $_[1]; # Lineas separadas con "\n" !
+    my $asunto          = $_[2];
+    my $encoding        = config->{'MAILING'}{'mail_send_encoding'};
+    my $charset         = config->{'MAILING'}{'mail_send_charset'};
+    my $rt              = config->{'MAILING'}{'mail_send_reply'};
+    
+    my $message = Email::MIME->create(
+        header_str => [
+            From     => $emisor,
+            To       => $recipiente,
+            Subject  => $asunto,
+            #Reply-To => $rt,
+        ],
+        attributes => {
+            encoding => $encoding,
+            charset  => $charset,
+        },
+        body_str => $mensaje,
+    );
+
+    # send the message
+    use Email::Sender::Simple qw(sendmail);
+    sendmail($mensaje);
+}
 
 #    _   _   _ _____ _   _ 
 #   / \ | | | |_   _| | | |
@@ -195,6 +224,7 @@ sub permission_denied_page_handler {
     template 'login';
 }
 
+
 ######################################################################
 #|  _ \  / \  | \ | |/ ___| ____|  _ \  |  _ \ / \  |  _ \_   _|
 #| | | |/ _ \ |  \| | |   |  _| | |_) | | |_) / _ \ | |_) || |  
@@ -202,7 +232,7 @@ sub permission_denied_page_handler {
 #|____/_/   \_\_| \_|\____|_____|_| \_\ |_| /_/   \_\_| \_\|_|  
 ######################################################################
 
-#    ><(((º> j\--------------------======o       Hook
+#    ><(((º> j\--------------------======o       Hook... ja!
 
 hook before => sub {
     leer_db();
@@ -456,5 +486,15 @@ any qr{.*} => sub {
     template '404', { path => request->path };
 }; 
 
+=pod
+
+=head1 Autor y Licencia.
+
+Programado por B<Marxbro> aka B<Gstv>, distribuir solo bajo la licencia
+WTFPL: I<Do What the Fuck You Want To Public License>.
+
+Zaijian.
+
+=cut
 
 true;
