@@ -1,6 +1,7 @@
 package tiquete;
 use Dancer2;
 use Dancer2::Plugin::Auth::Extensible;
+use v5.20;
 
 # |    o               |         
 # |--- .,---..   .,---.|--- ,---.
@@ -9,10 +10,8 @@ use Dancer2::Plugin::Auth::Extensible;
 #           |                    
 # ------------------------------->>
 
-
-#use utf8;
+use utf8;
 use POSIX q/strftime/;
-#use Pod::Usage;
 use File::Slurp;
 use feature             "say";
 use Data::Uniqid        "luniqid";
@@ -85,7 +84,9 @@ sub leer_db {
         #Guardar los mails por separado.
         my $mail_ppl = $f[1];
         if ( $M{$mail_ppl} ){
-            push ( @{$M{$mail_ppl}} , $id);
+            unless ($id ~~ @{$M{$mail_ppl}}){
+                push ( @{$M{$mail_ppl}} , $id);
+            }
         } else {
             my @te = ( $f[0] );    
             $M{$mail_ppl} = \@te;
@@ -339,7 +340,11 @@ get '/clientes' => sub {
 };
 get '/clientes/:mm' => sub {
     my $mm = params->{'mm'};
-    template 'clientes', { ids => $M{$mm} , mail => $mm};
+    template 'clientes', { 
+        ids => $M{$mm} , 
+        mail => $mm, 
+        max => config->{'max_tiks_per_mail'}, 
+    };
 };
 
 
@@ -350,10 +355,14 @@ get '/all' => require_login sub {
     my %abiertos = ();
     my %cerrados = ();
     foreach my $k (keys %T){
-        if ($T{$k}{'7estado'} !~ m"cerrado"gi){
-            $abiertos{$k} = $T{$k};
+        if ($T{$k}{'7estado'}){
+            if ($T{$k}{'7estado'} !~ m"cerrado"gi){
+                $abiertos{$k} = $T{$k};
+            } else {
+                $cerrados{$k} = $T{$k};
+            }
         } else {
-            $cerrados{$k} = $T{$k};
+            $abiertos{$k} = $T{$k};
         }
     }
     template 'all', { abiertos => \%abiertos, cerrados => \%cerrados, fecha => $hoy_ahora};

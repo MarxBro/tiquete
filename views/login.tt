@@ -4,15 +4,21 @@
 <p> Necesita identificarse para ver esto.  </p>
 
 
-
-<form method="post">
+<form method="post" style="display:block;width:50%;">
+    <span>
     <label for="username">Usuario:</label>
-    <input type="text" name="username" id="username">
+    <input type="text" name="username" id="username" style="display:block; width: 100%;">
+    </span>
     <br />
+    <span>
     <label for="password">Password:</label>
-    <input type="password" name="password" id="password">
+    <input type="password" name="password" id="password" style="display:block; width: 100%;">
+    </span>
     <br />
+    <span>
     <input type="hidden" name="return_url" value="/all">
-    <input type="submit" value="Login">
-
+    <input type="submit" value="Login" style="padding:10px;float:right;">
+    </span>
 </form>
+
+<a href="/"><img src="/images/tik.png" alt="VOLVER"/></a>

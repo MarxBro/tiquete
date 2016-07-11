@@ -1,4 +1,6 @@
-<h2>Tickets abiertos por <% mail %></h2>
+<h2>Tickets abiertos por <br /><% mail %></h2>
+
+<p>Puede haber hasta <b><% max %> tickets asignados</b> por dirección de correo.</p>
 
 <ul>
     <% FOR m in ids %>

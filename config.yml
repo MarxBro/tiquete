@@ -70,8 +70,8 @@ default_tik_dev: "Ticket asignado para su pronta resoluci&oacute;n. Vuelva pront
 min_longitud_descripcion_tik: 30
 precio_hora_soporte: "$400"
 
-devolucion_primera: "Escriba debajo la devolución para el cliente."
-devolucion_retoques: "Cuidado! esta retocando la devolución prexistente."
+devolucion_primera: "Escriba debajo la devoluci$oacute;n para el cliente."
+devolucion_retoques: "Cuidado! esta retocando la devoluci&oacute;n prexistente."
 
 MAILING:
 # Mails! Para enviar desde la app.

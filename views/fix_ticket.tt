@@ -11,7 +11,9 @@
         <h3>Fecha</h3>        <pre><% Fecha %></pre>
     </div>
 
-    <span style="font-size 150%;"><% aviso %></span>
+    <br />
+    <h3 style="font-size:130%;padding:2em;">--- <% aviso %> ---</h3>
+    <br />
     
     <div id="respuesta">
     <form method="post" action="/fix" >
@@ -20,7 +22,7 @@
             <option value="soporte">Soporte Requerido</option>
         </select>
         <br />
-        <textarea rows="20" cols="80" name="Devo" required><% devolucion %></textarea>
+        <textarea rows="20" cols="80" name="Devo" placeholder="<% devolucion %>" required></textarea>
         <br />
         <input type="hidden" value="<% pass %>" name="pass">
         <input type="hidden" value="<% ID %>" name="ID">
@@ -29,3 +31,5 @@
     </div>
 
 </div>
+
+<div id="mo" style="padding:2em;float:right"><a href="/logout">S A L I R</a> -- Último acceso: <% Fecha %></div>
