@@ -20,6 +20,9 @@ use Data::Uniqid        "luniqid";
 use Email::MIME;
 use List::MoreUtils     "first_index";
 
+no warnings 'experimental::smartmatch'; # Nobody likes you!
+
+
 =pod
 
 =encoding utf8
@@ -160,7 +163,10 @@ sub gente_limitada {
     get_mails_with_open_tiks();
     return ( $b ~~ @limitados );
 }
-#   -------------->>>
+
+# MAILING FUNCTION PARA DEPLOY   -------------->>>
+# Salio de aca: http://learn.perl.org/examples/email.html
+
 =pod
 
 =head2 MAILING
@@ -180,7 +186,7 @@ Usar CSV es malo, pero es mas facil pa que la gilada despues use excel y se arre
 #* Mailing -> todo!
 
 =cut
-# Salio de aca: http://learn.perl.org/examples/email.html
+
 sub mailing {
     my $emisor          = config->{'MAILING'}{'mail_send_from'};;
     my $recipiente      = $_[0];
@@ -362,8 +368,7 @@ get '/ticket/:ID' => sub {
     };
 };
 
-#### Clientes
-#Evitar que elsistema de tickets renderee cualka
+# Clientes -->
 get '/clientes' => sub {
     status 'not_found';
     template '404', { path => request->path };
@@ -480,7 +485,7 @@ any '/logout' => sub {
 };
 
 ######################################################################
-# Regla para agarrar cualquier error o balazo cósmico.
+# Regla para agarrar cualquier error o guascazo cósmico.
 any qr{.*} => sub {
     status 'not_found';
     template '404', { path => request->path };
