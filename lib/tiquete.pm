@@ -186,7 +186,6 @@ Usar CSV es malo, pero es mas facil pa que la gilada despues use excel y se arre
 #* Mailing -> todo!
 
 =cut
-
 sub mailing {
     my $emisor          = config->{'MAILING'}{'mail_send_from'};;
     my $recipiente      = $_[0];
@@ -214,6 +213,38 @@ sub mailing {
     use Email::Sender::Simple qw(sendmail);
     sendmail($mensaje);
 }
+
+sub msgs_when_new_tik {
+    my $id_ntk = shift;
+    my $asunto = config->{'MAILING'}{'mail_asunto_todos'} . $id_ntk;
+    my $url_ntk = $root_url . '/ticket/' . $id_ntk;
+    my $user_msg  = config->{'MAILING'}{'mail_tik_inicio'} . "\n" .
+        config->{'MAILING'}{'mail_tmpl_id'} . $id_ntk . "\n" .
+        config->{'MAILING'}{'mail_tmpl_url'} . $url_ntk .  "\n" .
+        config->{'MAILING'}{'mail_tmpl_pie'};
+    my $admin_msg = config->{'MAILING'}{'mail_tik_open'} . "\n" . 
+        config->{'MAILING'}{'mail_tmpl_id'} . $id_ntk . "\n" .
+        config->{'MAILING'}{'mail_tmpl_url'} . $url_ntk .  "\n" .
+        config->{'MAILING'}{'mail_tmpl_pie'};
+    return ($user_msg, $admin_msg,$asunto);
+}
+sub msgs_when_closed_tik {
+    my $id_ntk = shift;
+    my $estado = shift;
+    my $asunto = config->{'MAILING'}{'mail_asunto_todos'} . $id_ntk;
+    my $url_ntk = $root_url . '/ticket/' . $id_ntk;
+    my $user_msg = config->{'MAILING'}{'mail_tik_closed'} . "\n" . 
+        config->{'MAILING'}{'mail_tmpl_id'} . $id_ntk . "\n" .
+        config->{'MAILING'}{'mail_tmpl_url'} . $url_ntk .  "\n";
+    if ($estado =~ m'cerrado'gi) {
+        $user_msg .= config->{'MAILING'}{'mail_tmpl_estado_cerrado'} . $url_ntk .  "\n";
+    } else {
+        $user_msg .= config->{'MAILING'}{'mail_tmpl_estado_soporte'} . $url_ntk .  "\n";
+    }
+    $user_msg .= config->{'MAILING'}{'mail_tmpl_pie'};
+    return ($user_msg,$asunto);
+}
+
 
 #    _   _   _ _____ _   _ 
 #   / \ | | | |_   _| | | |
@@ -299,6 +330,13 @@ post '/nuevo' => sub {
 
     #al final
     write_db($ln);
+    if (config->{'MAILING'}{'mail_enable'}){
+        my ($m_u, $m_a, $a_mm) = msgs_when_new_tik($ID_new);
+        #mail al user
+        mailing($email,$m_u,$a_mm);
+        #mail al admin
+        mailing(config->{'MAILING'}{'mail_webmaster'},$m_a,$a_mm);
+    }
     redirect "/ticket/$ID_new";
 };
 
@@ -462,6 +500,13 @@ post '/fix' => require_login sub {
     $csv_file[$index_of_ticket] = $ln_par_laburar;
     # al final: escribir de nuevo y redireccionar (el hook recarga la data)
     write_file(config->{'data'}, { binmode => ':utf8'}, @csv_file);
+    # Mandar un mail
+    if (config->{'MAILING'}{'mail_enable'}){
+        my ($m_u, $a_mm) = msgs_when_closed_tik($tik_id, $estado);
+        #mail al user
+        my $email_user_tik = $T{$tik_id}{'1mail'};
+        mailing($email_user_tik,$m_u,$a_mm);
+    }
     redirect "/ticket/$tik_id";
 };
 

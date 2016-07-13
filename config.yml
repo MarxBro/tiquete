@@ -86,6 +86,8 @@ MAILING:
 
     mail_tmpl_id: "El ID es: "
     mail_tmpl_url: "La URL es: "
+    mail_tmpl_estado_cerrado: "Su ticket se cerró."
+    mail_tmpl_estado_soporte: "La resolución de su ticket requiere soporte. Contáctenos!"
     mail_tmpl_pie: "---\nc@hipermegared.com.ar\nHMR. 2016"
     mail_tik_inicio: |
         Su ticket se ha inicializado exitosamente.
@@ -95,4 +97,5 @@ MAILING:
         Se abrió un nuevo ticket.
     mail_tik_closed: |
         Se cerró su previo ticket.
+    mail_asunto_todos: "HMR - Soporte : Ticket "
 
