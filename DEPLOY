@@ -1,0 +1,27 @@
+  <VirtualHost *:80>
+        ServerName www.example.com
+
+        # /srv/www.example.com is the root of your
+        # dancer application
+        DocumentRoot /srv/www.example.com/public
+
+        ServerAdmin you@example.com
+
+        <Directory "/srv/www.example.com/public">
+           AllowOverride None
+           Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+           Order allow,deny
+           Allow from all
+           AddHandler fastcgi-script .fcgi
+        </Directory>
+
+         RewriteEngine On
+         RewriteCond %{REQUEST_FILENAME} !-f
+         # RewriteRule ^(.*)$ /dispatch.cgi$1 [QSA,L]
+         RewriteRule ^(.*)$ /dispatch.fcgi$1 [QSA,L] # FCGI!
+
+         ErrorLog  /var/log/apache2/www.example.com-error.log
+         CustomLog /var/log/apache2/www.example.com-access_log common
+     </VirtualHost>
+
+

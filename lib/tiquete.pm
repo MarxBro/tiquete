@@ -89,7 +89,7 @@ sub leer_db {
         my %Tt;
         foreach my $nn (0 .. $#fields_csv){
             $Tt{$fields_csv[$nn]} = $f[$nn];
-            }
+        }
         my $tref = \%Tt;
         my $id = $f[0];
         $T{$id} = $tref;
@@ -218,7 +218,7 @@ sub msgs_when_new_tik {
     my $id_ntk = shift;
     my $asunto = config->{'MAILING'}{'mail_asunto_todos'} . $id_ntk;
     my $url_ntk = $root_url . '/ticket/' . $id_ntk;
-    my $user_msg  = config->{'MAILING'}{'mail_tik_inicio'} . "\n" .
+    my $user_msg = config->{'MAILING'}{'mail_tik_inicio'} . "\n" .
         config->{'MAILING'}{'mail_tmpl_id'} . $id_ntk . "\n" .
         config->{'MAILING'}{'mail_tmpl_url'} . $url_ntk .  "\n" .
         config->{'MAILING'}{'mail_tmpl_pie'};
