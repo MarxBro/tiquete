@@ -80,22 +80,24 @@ MAILING:
     mail_webmaster: w@hipermegared.com.ar
     mail_send_from: tickets@hipermegared.com.ar
     mail_send_reply: c@hipermegared.com.ar
-    mail_send_encoding: ISO-8859-1
-    mail_send_charset: quoted-printable
-#Mail templates
+    #mail_send_charset: UTF-8
+    mail_send_charset:ISO-8859-1
+    mail_send_encoding: quoted-printable
 
+
+#Mail templates
     mail_tmpl_id: "El ID es: "
     mail_tmpl_url: "La URL es: "
-    mail_tmpl_estado_cerrado: "Su ticket se cerró."
-    mail_tmpl_estado_soporte: "La resolución de su ticket requiere soporte. Contáctenos!"
+    mail_tmpl_estado_cerrado: "Su ticket se cerro."
+    mail_tmpl_estado_soporte: "La resolucion de su ticket requiere soporte. Contactenos!"
     mail_tmpl_pie: "---\nc@hipermegared.com.ar\nHMR. 2016"
     mail_tik_inicio: |
         Su ticket se ha inicializado exitosamente.
-        Este mensaje confirma su llegada a los administradores para su pronta resolución.
+        Este mensaje confirma su llegada a los administradores para su pronta resolucion.
         Le recomendamos conservar el link y el identificador de su ticket para futura referencia.
     mail_tik_open: |
-        Se abrió un nuevo ticket.
+        Se abrio un nuevo ticket.
     mail_tik_closed: |
-        Se cerró su previo ticket.
+        Se cerro su previo ticket.
     mail_asunto_todos: "HMR - Soporte : Ticket "
 

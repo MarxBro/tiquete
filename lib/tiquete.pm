@@ -203,6 +203,7 @@ sub mailing {
             #Reply-To => $rt,
         ],
         attributes => {
+            content_type => 'text/plain',
             encoding => $encoding,
             charset  => $charset,
         },
@@ -211,7 +212,7 @@ sub mailing {
 
     # send the message
     use Email::Sender::Simple qw(sendmail);
-    sendmail($mensaje);
+    sendmail($message);
 }
 
 sub msgs_when_new_tik {
@@ -237,9 +238,9 @@ sub msgs_when_closed_tik {
         config->{'MAILING'}{'mail_tmpl_id'} . $id_ntk . "\n" .
         config->{'MAILING'}{'mail_tmpl_url'} . $url_ntk .  "\n";
     if ($estado =~ m'cerrado'gi) {
-        $user_msg .= config->{'MAILING'}{'mail_tmpl_estado_cerrado'} . $url_ntk .  "\n";
+        $user_msg .= config->{'MAILING'}{'mail_tmpl_estado_cerrado'}. "\n";
     } else {
-        $user_msg .= config->{'MAILING'}{'mail_tmpl_estado_soporte'} . $url_ntk .  "\n";
+        $user_msg .= config->{'MAILING'}{'mail_tmpl_estado_soporte'}. "\n";
     }
     $user_msg .= config->{'MAILING'}{'mail_tmpl_pie'};
     return ($user_msg,$asunto);
