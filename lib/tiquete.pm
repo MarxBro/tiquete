@@ -12,7 +12,8 @@ package tiquete;
 
 use Dancer2;
 use Dancer2::Plugin::Auth::Extensible;
-use v5.20;
+#use v5.20;
+use feature "say";
 use utf8;
 use POSIX q/strftime/;
 use File::Slurp;
@@ -70,6 +71,7 @@ my $tik_id = 3;
 my @csv_file = ();
 my $sep = '|||';
 my $go_back_linky = '<br /><input action="action" type="button" value="Volver" onclick="history.go(-1);" /><br />';
+my $root_url = config->{'root_URL'};
 
 our $VERSION = '0.1';
 
@@ -81,10 +83,11 @@ our $VERSION = '0.1';
 ######################################################################
 
 sub leer_db {
-    my @archivo = read_file(config->{'data'}, { binmode => ':utf8'});
+    my @archivo = grep {!/^#/} read_file(config->{'data'}, { binmode => ':utf8'});
     @csv_file = @archivo;
     foreach my $ln (@archivo){
         next if $ln =~ /^id/i;
+        next if $ln =~ /^#/i;
         my @f = split (/\|{3}/,$ln);
         my %Tt;
         foreach my $nn (0 .. $#fields_csv){
@@ -509,6 +512,18 @@ post '/fix' => require_login sub {
         mailing($email_user_tik,$m_u,$a_mm);
     }
     redirect "/ticket/$tik_id";
+};
+
+
+get '/supr/:ID' => require_login sub {
+    my $tik_id = params->{'ID'};
+    my $index_of_ticket = first_index {/$tik_id/} @csv_file;
+    my $all_stuffs  = $csv_file[$index_of_ticket];
+    $all_stuffs     =~ s/\r//g;
+    $all_stuffs     =~ s/\n//g;
+    $csv_file[$index_of_ticket] = '#' . $all_stuffs . "\n";
+    write_file(config->{'data'}, { binmode => ':utf8'}, @csv_file);
+    redirect "/all";
 };
 
 ######################################################################

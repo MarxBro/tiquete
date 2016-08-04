@@ -2,6 +2,7 @@
 
         <table frame="box" style="padding: 1em;">
         <tr>
+            <th >del</th>
             <th >IDENTIFICADOR</th>
             <th >Mail Contacto</th>
             <th >Nombre Cliente</th>
@@ -16,6 +17,10 @@
         <!-- loopear -->
         <% FOR k in abiertos.keys.sort %>
         <tr>
+            
+            <!-- cruz para borrar cualquier ticket en cualquier momento... -->
+            <td><a href="/supr/<% k %>">X</a></td>
+
             <% FOR coso in abiertos.$k.keys.sort %>
                 <% IF abiertos.$k.$coso %>
                     <% IF abiertos.$k.$coso == "soporte" %>
@@ -68,6 +73,7 @@
         <h2>Tickets Cerrados</h2>
         <table frame="box" style="padding: 1em;">
         <tr>
+            <th >del</th>
             <th >IDENTIFICADOR</th>
             <th >Mail Contacto</th>
             <th >Nombre Cliente</th>
@@ -81,6 +87,8 @@
         <!-- loopear -->
         <% FOR k in cerrados.keys.sort %>
         <tr>
+            <!-- cruz para borrar cualquier ticket en cualquier momento... -->
+            <td><a href="/supr/<% k %>">X</a></td>
             <% FOR coso in cerrados.$k.keys.sort %>
                 <% IF cerrados.$k.$coso %>
                     <% IF coso == "0ID" %>

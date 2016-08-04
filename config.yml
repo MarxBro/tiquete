@@ -50,8 +50,8 @@ plugins:
                     - user: admin
                       pass: secretisimo123
 
-
-
+#dirección URL
+root_URL: help.hmr.com
 
 
 
@@ -81,7 +81,7 @@ MAILING:
     mail_send_from: tickets@hipermegared.com.ar
     mail_send_reply: c@hipermegared.com.ar
     #mail_send_charset: UTF-8
-    mail_send_charset:ISO-8859-1
+    mail_send_charset: ISO-8859-1
     mail_send_encoding: quoted-printable
 
 
