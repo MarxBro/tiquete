@@ -44,8 +44,8 @@ plackup -p 3000 bin/app.psgi
 
 # Faltaría
 
-* Deploy con mailing (no pude probar nada hasta ahora)
+* ~~~Deploy con mailing (no pude probar nada hasta ahora)~~~
 * ~~~Agregarle un mecanismo de login menos improvisado! (mediante `cpanp i Dancer2::Plugin::Auth::Extensible`).~~~
-* Deploy and optimize (los hooks son bastante chiottos).
-* Reemplazar el smartmatch (?)
-* Plackup Deploy
+* ~~~Deploy and optimize (los hooks son bastante chiottos).~~~
+* ~~~Reemplazar el smartmatch (?)~~~
+* ~~~Plackup Deploy~~~

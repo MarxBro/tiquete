@@ -432,6 +432,7 @@ get '/all' => require_login sub {
     my %abiertos = ();
     my %cerrados = ();
     foreach my $k (keys %T){
+        next if $k =~ m/^#/i;
         if ($T{$k}{'7estado'}){
             if ($T{$k}{'7estado'} !~ m"cerrado"gi){
                 $abiertos{$k} = $T{$k};
@@ -521,8 +522,11 @@ get '/supr/:ID' => require_login sub {
     my $all_stuffs  = $csv_file[$index_of_ticket];
     $all_stuffs     =~ s/\r//g;
     $all_stuffs     =~ s/\n//g;
-    $csv_file[$index_of_ticket] = '#' . $all_stuffs . "\n";
-    write_file(config->{'data'}, { binmode => ':utf8'}, @csv_file);
+    if ($index_of_ticket >= 0){
+        $csv_file[$index_of_ticket] = '#' . $all_stuffs . "\n";
+        delete $T{$tik_id}; # borrar el ticket del hash tambien!
+        write_file(config->{'data'}, { binmode => ':utf8'}, @csv_file);
+    }
     redirect "/all";
 };
 
